@@ -38,7 +38,9 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Usuario.findByNome", query = "SELECT u FROM Usuario u WHERE u.nome = :nome")
     , @NamedQuery(name = "Usuario.findByStatus", query = "SELECT u FROM Usuario u WHERE u.status = :status")
     , @NamedQuery(name = "Usuario.findByLocalidade", query = "SELECT u FROM Usuario u WHERE u.localidade = :localidade")
-    , @NamedQuery(name = "Usuario.findByQntvisitante", query = "SELECT u FROM Usuario u WHERE u.qntvisitante = :qntvisitante")})
+    , @NamedQuery(name = "Usuario.findByQntvisitante", query = "SELECT u FROM Usuario u WHERE u.qntvisitante = :qntvisitante")
+    , @NamedQuery(name = "Usuario.findBySenha", query = "SELECT u FROM Usuario u WHERE u.senha = :senha")
+    , @NamedQuery(name = "Usuario.findByEmail", query = "SELECT u FROM Usuario u WHERE u.email = :email")})
 public class Usuario implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -63,6 +65,13 @@ public class Usuario implements Serializable {
     private String localidade;
     @Column(name = "QNTVISITANTE")
     private Integer qntvisitante;
+    @Size(max = 30)
+    @Column(name = "SENHA")
+    private String senha;
+    // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="E-mail inválido")//if the field contains email address consider using this annotation to enforce field validation
+    @Size(max = 50)
+    @Column(name = "EMAIL")
+    private String email;
     @JoinTable(name = "AMIZADE", joinColumns = {
         @JoinColumn(name = "USER_ID", referencedColumnName = "ID")}, inverseJoinColumns = {
         @JoinColumn(name = "AMIGO_ID", referencedColumnName = "ID")})
@@ -70,10 +79,14 @@ public class Usuario implements Serializable {
     private List<Usuario> usuarioList;
     @ManyToMany(mappedBy = "usuarioList")
     private List<Usuario> usuarioList1;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userRecebe")
-    private List<Avaliacao> avaliacaoList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userFaz")
+    private List<Avaliacao> avaliacaoList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userRecebe")
     private List<Avaliacao> avaliacaoList1;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "hospedadoId")
+    private List<Avaliacaocomposta> avaliacaocompostaList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "hospederoId")
+    private List<Avaliacaocomposta> avaliacaocompostaList1;
     @JoinColumn(name = "ESPORTE_ID", referencedColumnName = "ID")
     @ManyToOne(optional = false)
     private Esporte esporteId;
@@ -132,6 +145,22 @@ public class Usuario implements Serializable {
         this.qntvisitante = qntvisitante;
     }
 
+    public String getSenha() {
+        return senha;
+    }
+
+    public void setSenha(String senha) {
+        this.senha = senha;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     @XmlTransient
     public List<Usuario> getUsuarioList() {
         return usuarioList;
@@ -166,6 +195,24 @@ public class Usuario implements Serializable {
 
     public void setAvaliacaoList1(List<Avaliacao> avaliacaoList1) {
         this.avaliacaoList1 = avaliacaoList1;
+    }
+
+    @XmlTransient
+    public List<Avaliacaocomposta> getAvaliacaocompostaList() {
+        return avaliacaocompostaList;
+    }
+
+    public void setAvaliacaocompostaList(List<Avaliacaocomposta> avaliacaocompostaList) {
+        this.avaliacaocompostaList = avaliacaocompostaList;
+    }
+
+    @XmlTransient
+    public List<Avaliacaocomposta> getAvaliacaocompostaList1() {
+        return avaliacaocompostaList1;
+    }
+
+    public void setAvaliacaocompostaList1(List<Avaliacaocomposta> avaliacaocompostaList1) {
+        this.avaliacaocompostaList1 = avaliacaocompostaList1;
     }
 
     public Esporte getEsporteId() {

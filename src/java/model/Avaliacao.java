@@ -29,8 +29,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "Avaliacao.findAll", query = "SELECT a FROM Avaliacao a")
     , @NamedQuery(name = "Avaliacao.findById", query = "SELECT a FROM Avaliacao a WHERE a.id = :id")
-    , @NamedQuery(name = "Avaliacao.findByTipo", query = "SELECT a FROM Avaliacao a WHERE a.tipo = :tipo")
-    , @NamedQuery(name = "Avaliacao.findByTexto", query = "SELECT a FROM Avaliacao a WHERE a.texto = :texto")
+    , @NamedQuery(name = "Avaliacao.findByText", query = "SELECT a FROM Avaliacao a WHERE a.text = :text")
     , @NamedQuery(name = "Avaliacao.findByNota", query = "SELECT a FROM Avaliacao a WHERE a.nota = :nota")})
 public class Avaliacao implements Serializable {
 
@@ -40,23 +39,22 @@ public class Avaliacao implements Serializable {
     @NotNull
     @Column(name = "ID")
     private Integer id;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "TIPO")
-    private int tipo;
     @Size(max = 255)
-    @Column(name = "TEXTO")
-    private String texto;
+    @Column(name = "TEXT")
+    private String text;
     @Basic(optional = false)
     @NotNull
     @Column(name = "NOTA")
     private int nota;
-    @JoinColumn(name = "USER_RECEBE", referencedColumnName = "ID")
+    @JoinColumn(name = "TIPO", referencedColumnName = "ID")
     @ManyToOne(optional = false)
-    private Usuario userRecebe;
+    private Tipo tipo;
     @JoinColumn(name = "USER_FAZ", referencedColumnName = "ID")
     @ManyToOne(optional = false)
     private Usuario userFaz;
+    @JoinColumn(name = "USER_RECEBE", referencedColumnName = "ID")
+    @ManyToOne(optional = false)
+    private Usuario userRecebe;
 
     public Avaliacao() {
     }
@@ -65,9 +63,8 @@ public class Avaliacao implements Serializable {
         this.id = id;
     }
 
-    public Avaliacao(Integer id, int tipo, int nota) {
+    public Avaliacao(Integer id, int nota) {
         this.id = id;
-        this.tipo = tipo;
         this.nota = nota;
     }
 
@@ -79,20 +76,12 @@ public class Avaliacao implements Serializable {
         this.id = id;
     }
 
-    public int getTipo() {
-        return tipo;
+    public String getText() {
+        return text;
     }
 
-    public void setTipo(int tipo) {
-        this.tipo = tipo;
-    }
-
-    public String getTexto() {
-        return texto;
-    }
-
-    public void setTexto(String texto) {
-        this.texto = texto;
+    public void setText(String text) {
+        this.text = text;
     }
 
     public int getNota() {
@@ -103,12 +92,12 @@ public class Avaliacao implements Serializable {
         this.nota = nota;
     }
 
-    public Usuario getUserRecebe() {
-        return userRecebe;
+    public Tipo getTipo() {
+        return tipo;
     }
 
-    public void setUserRecebe(Usuario userRecebe) {
-        this.userRecebe = userRecebe;
+    public void setTipo(Tipo tipo) {
+        this.tipo = tipo;
     }
 
     public Usuario getUserFaz() {
@@ -117,6 +106,14 @@ public class Avaliacao implements Serializable {
 
     public void setUserFaz(Usuario userFaz) {
         this.userFaz = userFaz;
+    }
+
+    public Usuario getUserRecebe() {
+        return userRecebe;
+    }
+
+    public void setUserRecebe(Usuario userRecebe) {
+        this.userRecebe = userRecebe;
     }
 
     @Override
