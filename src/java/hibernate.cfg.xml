@@ -43,8 +43,17 @@ Contributor(s):
   <session-factory>
     <property name="hibernate.dialect">org.hibernate.dialect.DerbyDialect</property>
     <property name="hibernate.connection.driver_class">org.apache.derby.jdbc.ClientDriver</property>
-    <property name="hibernate.connection.url">jdbc:derby://localhost:1527/sample</property>
-    <property name="hibernate.connection.username">app</property>
-    <property name="hibernate.connection.password">app</property>
+    <property name="hibernate.connection.url">jdbc:derby://localhost:1527/DW</property>
+    <property name="hibernate.connection.username">usuario</property>
+    <property name="hibernate.connection.password">123</property>
+    <property name="hibernate.connection.pool_size">1</property>
+    <mapping class="model.Usuario" package="model"/>
+    <mapping class="model.Usuario"/>
+    <mapping class="model.Avaliacao" package="model"/>
+    <mapping class="model.Avaliacaocomposta" package="model"/>
+    <mapping class="model.Tipo" package="model"/>
+    <mapping class="model.Avaliacao"/>
+    <mapping class="model.Avaliacaocomposta"/>
+    <mapping class="model.Tipo"/>
   </session-factory>
 </hibernate-configuration>

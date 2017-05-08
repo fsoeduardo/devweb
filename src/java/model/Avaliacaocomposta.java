@@ -24,7 +24,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Ricardo Junior
  */
 @Entity
-@Table(name = "AVALIACAOCOMPOSTA")
+@Table(catalog = "", schema = "USUARIO")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Avaliacaocomposta.findAll", query = "SELECT a FROM Avaliacaocomposta a")
@@ -39,29 +39,29 @@ public class Avaliacaocomposta implements Serializable {
     @Id
     @Basic(optional = false)
     @NotNull
-    @Column(name = "ID")
+    @Column(nullable = false)
     private Integer id;
     @Size(max = 255)
-    @Column(name = "TEXTOHOSPEDAGEM")
+    @Column(length = 255)
     private String textohospedagem;
     @Size(max = 255)
-    @Column(name = "TEXTOHOSPEDERO")
+    @Column(length = 255)
     private String textohospedero;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "NOTA")
+    @Column(nullable = false)
     private int nota;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "STATUS")
+    @Column(nullable = false)
     private Boolean status;
-    @JoinColumn(name = "TIPO", referencedColumnName = "ID")
+    @JoinColumn(name = "TIPO", referencedColumnName = "ID", nullable = false)
     @ManyToOne(optional = false)
     private Tipo tipo;
-    @JoinColumn(name = "HOSPEDADO_ID", referencedColumnName = "ID")
+    @JoinColumn(name = "HOSPEDADO_ID", referencedColumnName = "ID", nullable = false)
     @ManyToOne(optional = false)
     private Usuario hospedadoId;
-    @JoinColumn(name = "HOSPEDERO_ID", referencedColumnName = "ID")
+    @JoinColumn(name = "HOSPEDERO_ID", referencedColumnName = "ID", nullable = false)
     @ManyToOne(optional = false)
     private Usuario hospederoId;
 

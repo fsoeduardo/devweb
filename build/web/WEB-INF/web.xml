@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
+    <servlet>
+        <servlet-name>LoginUsuarioServlet</servlet-name>
+        <servlet-class>Servlets.LoginUsuarioServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>PerfilServlet</servlet-name>
+        <servlet-class>Servlets.PerfilServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>LoginUsuarioServlet</servlet-name>
+        <url-pattern>/LoginUsuarioServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>PerfilServlet</servlet-name>
+        <url-pattern>/PerfilServlet</url-pattern>
+    </servlet-mapping>
+    <session-config>
+        <session-timeout>
+            30
+        </session-timeout>
+    </session-config>
+    <welcome-file-list>
+        <welcome-file>login.jsp</welcome-file>
+    </welcome-file-list>
+</web-app>

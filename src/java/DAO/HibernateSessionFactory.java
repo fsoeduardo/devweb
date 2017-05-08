@@ -13,7 +13,7 @@ import org.hibernate.service.ServiceRegistry;
 
 /**
  *
- * @author valmeida
+ * @author #descubra
  */
 public class HibernateSessionFactory {
     static SessionFactory sessionFactory;
@@ -31,3 +31,4 @@ public class HibernateSessionFactory {
         return sessionFactory.openSession();
     }
 }
+
