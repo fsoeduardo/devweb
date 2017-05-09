@@ -36,10 +36,11 @@
          <p> <b>Recomendacoes por amizade:</b> </p>
        
          <% for (Avaliacao aux: AvaliacaoDAO.getamizade(user.getId())) { %>
-            <p>Nome: <a href="PerfilServlet?id=<%=aux.getId()%>"> <%= aux.getUserFaz().getNome() %></a> <p>
+            <p>Nome: <a href="PerfilServlet?id=<%=aux.getUserFaz().getId() %>"> <%= aux.getUserFaz().getNome() %></a> <p>
             <p>Nota: <%= aux.getNota()%></p>
             <p>Mensagem:<%= aux.getText() %></p>           
-             
+             <% somanota += aux.getNota();%>
+             <% cont+=1;%>
         <% } %>
 
         
@@ -97,7 +98,6 @@
             
             <% } %>
         <% } %>
-        
         <% float media = somanota/cont;%>
         <p><b>Média</b> <%= media  %><p>
     </body>
