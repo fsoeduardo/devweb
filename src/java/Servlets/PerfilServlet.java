@@ -47,7 +47,7 @@ public class PerfilServlet extends HttpServlet {
         query.setString("id", request.getParameter("id"));
         List returned_query = query.list();
         Usuario user = (Usuario) returned_query.get(0);
-        RequestDispatcher view = request.getRequestDispatcher("PerfilGet.jsp");
+        RequestDispatcher view = request.getRequestDispatcher("perfil.jsp");
         request.setAttribute("user", user);
         view.forward(request, response);
         

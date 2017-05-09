@@ -54,6 +54,7 @@ public class LoginUsuarioServlet extends HttpServlet {
         if (!returned_query.isEmpty()) {
             Usuario user = (Usuario) returned_query.get(0);
             if (user.getSenha().compareTo(request.getParameter("password")) == 0) {
+                request.getSession().setAttribute("usuario", user.getNome());                
                 RequestDispatcher view = request.getRequestDispatcher("perfil.jsp");
                 request.setAttribute("user", user);
                 view.forward(request, response);

@@ -15,89 +15,90 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     </head>
     <body>
-        
          <% Usuario user = ((Usuario)request.getAttribute("user")); %>
-         Nome: <%= user.getNome() %>
-         <br>
-         Esporte: Surf
-         <br>
+         <p> Usuario Logado: <%= request.getSession().getAttribute("usuario") %></p>
+         <p>Nome: <%= user.getNome() %></p>
+         <p>Esporte: Surf</p>
+         <% float somanota = 0; %>
+         <% float cont = 0; %>
          <% if (user.getStatus() == true) {%>
-            <p>Disponivel</p>
+            <p>Disponivel para hospedar</p>
         <%} else{ %>
-            <p>Indisponivel</p>
+            <p>Indisponivel para hospedar</p>
         <%}%>
-         <br>
-         Email: <%= user.getEmail() %>
-         <br>
-         Localidade: <%= user.getLocalidade() %>
-         <br>
-         Quant de visitantes <%= user.getQntvisitante()%>
-         <br> 
-         <br>
-         Recomendacoes por amizade:
-        <br>
+        
+         <p>Email: <%= user.getEmail() %> </p>
+        
+         <p> Localidade: <%= user.getLocalidade() %> </p>
+         
+         <p> Quantidade de visitantes <%= user.getQntvisitante()%> </p>
+         
+         <p> <b>Recomendacoes por amizade:</b> </p>
+       
          <% for (Avaliacao aux: AvaliacaoDAO.getamizade(user.getId())) { %>
-         <br>   
-         <br>
-            Nome: <%= aux.getUserFaz().getNome() %>
-            <br> 
-            Nota: <%= aux.getNota()%>
-            <br>
-            Mensagem:<%= aux.getText() %>  
-            <br>    
+            <p>Nome: <a href="PerfilServlet?id=<%=aux.getId()%>"> <%= aux.getUserFaz().getNome() %></a> <p>
+            <p>Nota: <%= aux.getNota()%></p>
+            <p>Mensagem:<%= aux.getText() %></p>           
+             
         <% } %>
 
-        <br>
-         Recomendacoes por Hospedagem:
+        
+         <p><b>Recomendacoes por Hospedagem:</b></p>
          
          <% for (Avaliacaocomposta aux: AvaliacaoDAO.gethospedero(user.getId())) { %>
-         <br>   
-         <br>
-          Nome: <%= aux.getHospedadoId().getNome()%>
-          <br>
-          Nota: <%= aux.getNota()%>
-          <br>
-          Mensagem:<%= aux.getTextohospedero() %>  
-            <br>
+            
+         
+         <p>Nome: <a href="PerfilServlet?id=<%=aux.getId()%>"> <%= aux.getHospedadoId().getNome()%> </a></p>
+          
+         <p>Nota: <%= aux.getNota()%> </p>
+          
+         <p>Mensagem:<%= aux.getTextohospedero() %></p>  
+         <% somanota += aux.getNota();%>
+         <% cont+=1;%>
         <% } %>
-        <br>
-        <br>
-        Recomendacoes por Hospedado:
+        
+        
+        <p><b>Recomendacoes por Hospedado:</b></p>
          
          <% for (Avaliacaocomposta aux: AvaliacaoDAO.gethospedado(user.getId())) { %>
-         <br>   
-         <br>
-            Nome: <%= aux.getHospederoId().getNome() %>
-            <br>
-            Nota: <%= aux.getNota()%>
-            <br>
-            Mensagem:<%= aux.getTextohospedagem() %>  
-            <br>
-        <% } %>
-        <br>
+            
          
-        Recomendacoes por Esporte:
+           <p>Nome:<a href="PerfilServlet?id=<%=aux.getId()%>"><%= aux.getHospederoId().getNome() %></a></p>
+            
+           <p>Nota: <%= aux.getNota()%></p>
+            
+            <p>Mensagem:<%= aux.getTextohospedagem() %> </p>  
+            <% somanota += aux.getNota();%>
+            <% cont+=1;%>
+        <% } %>
+        
+         
+        <p><b>Recomendacoes por Esporte:</b></p>
         <% for (Avaliacaocomposta aux: AvaliacaoDAO.getesporte(user.getId())) { %>
-         <br>   
-         <br>
+            
+         
            <% if (aux.getHospederoId().getId() != user.getId()) { %>
-                Nome: <%= aux.getHospederoId().getNome() %>
-                <br>
-                Nota: <%= aux.getNota()%>
-                <br>
-                Mensagem:<%= aux.getTextohospedagem() %>  
-                <br>
+               <p>Nome: <a href="PerfilServlet?id=<%=aux.getId()%>"><%= aux.getHospederoId().getNome() %></a></p>
+                
+               <p>Nota: <%= aux.getNota()%></p>
+                
+                <p>Mensagem:<%= aux.getTextohospedagem()%></p>  
+                 <% somanota += aux.getNota();%>
+                <% cont+=1;%>
                
             <% } else { %>
-                Nome: <%= aux.getHospedadoId().getNome() %>
-                <br>
-                Nota: <%= aux.getNota()%>
-                <br>
-                Mensagem:<%= aux.getTextohospedero()%>  
-                <br>
+                <p>Nome: <a href="PerfilServlet?id=<%=aux.getId()%>"> <%= aux.getHospedadoId().getNome() %> </a></p>
+                
+               <p>Nota: <%= aux.getNota()%></p>
+                
+                <p>Mensagem:<%= aux.getTextohospedero()%></p>  
+                         <% somanota += aux.getNota();%>
+         <% cont+=1;%>
             
             <% } %>
         <% } %>
-        <br>
+        
+        <% float media = somanota/cont;%>
+        <p><b>Média</b> <%= media  %><p>
     </body>
 </html>
