@@ -6,6 +6,7 @@
 package Servlets;
 
 import DAO.HibernateSessionFactory;
+import Model.Usuario;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
@@ -14,12 +15,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import model.Usuario;
-import model.Usuario_;
-import model.Avaliacao;
-import model.Avaliacaocomposta;
-import model.Avaliacao_;
-import model.Avaliacaocomposta_;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
@@ -54,7 +49,8 @@ public class LoginUsuarioServlet extends HttpServlet {
         if (!returned_query.isEmpty()) {
             Usuario user = (Usuario) returned_query.get(0);
             if (user.getSenha().compareTo(request.getParameter("password")) == 0) {
-                request.getSession().setAttribute("usuario", user.getNome());                
+                request.getSession().setAttribute("logadonome", user.getNome());
+                request.getSession().setAttribute("logadoid", user.getId());                
                 RequestDispatcher view = request.getRequestDispatcher("perfil.jsp");
                 request.setAttribute("user", user);
                 view.forward(request, response);

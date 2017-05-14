@@ -24,7 +24,7 @@
                 <input type="submit" value="Entrar">
             </form>
             <% if (request.getAttribute("login_failed") != null) { %>
-            <div>user/password incorrect</div>
+            <div>Usuario ou Senha incorreto</div>
             <% }%>
         </div>
     </body>

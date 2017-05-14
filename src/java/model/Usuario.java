@@ -3,19 +3,22 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package model;
+package Model;
 
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -48,18 +51,18 @@ public class Usuario implements Serializable {
     private Integer id;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 40)
+    @Size(min = 1, max = 64)
     @Column(name = "NOME")
     private String nome;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 40)
+    @Size(min = 1, max = 64)
     @Column(name = "SENHA")
     private String senha;
     // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="E-mail inválido")//if the field contains email address consider using this annotation to enforce field validation
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 40)
+    @Size(min = 1, max = 64)
     @Column(name = "EMAIL")
     private String email;
     @Basic(optional = false)
@@ -68,18 +71,42 @@ public class Usuario implements Serializable {
     private Boolean status;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 40)
+    @Size(min = 1, max = 64)
     @Column(name = "LOCALIDADE")
     private String localidade;
+    @Basic(optional = false)
+    @NotNull
     @Column(name = "QNTVISITANTE")
-    private Integer qntvisitante;
-    @JoinTable(name = "AMIZADE", joinColumns = {
+    private int qntvisitante;
+    @JoinTable(name = "SAIDAUSUARIO", joinColumns = {
         @JoinColumn(name = "USER_ID", referencedColumnName = "ID")}, inverseJoinColumns = {
-        @JoinColumn(name = "AMIGO_ID", referencedColumnName = "ID")})
+        @JoinColumn(name = "SAIDA_ID", referencedColumnName = "ID")})
+    @ManyToMany
+    private List<Saida> saidaList;
+    @JoinTable(name = "AMIZADE", joinColumns = {
+        @JoinColumn(name = "AMIGO_ID", referencedColumnName = "ID")}, inverseJoinColumns = {
+        @JoinColumn(name = "USER_ID", referencedColumnName = "ID")})
     @ManyToMany
     private List<Usuario> usuarioList;
     @ManyToMany(mappedBy = "usuarioList")
     private List<Usuario> usuarioList1;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userFaz")
+    private List<Avaliacaoamizade> avaliacaoamizadeList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userRecebe")
+    private List<Avaliacaoamizade> avaliacaoamizadeList1;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userFaz")
+    private List<Saida> saidaList1;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "hospedadoId")
+    private List<Avaliacaohospedagem> avaliacaohospedagemList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "hospedeiroId")
+    private List<Avaliacaohospedagem> avaliacaohospedagemList1;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userRecebe")
+    private List<Avaliacaoesporte> avaliacaoesporteList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userFaz")
+    private List<Avaliacaoesporte> avaliacaoesporteList1;
+    @JoinColumn(name = "ESPORTE_ID", referencedColumnName = "ID")
+    @ManyToOne(optional = false)
+    private Esporte esporteId;
 
     public Usuario() {
     }
@@ -88,13 +115,14 @@ public class Usuario implements Serializable {
         this.id = id;
     }
 
-    public Usuario(Integer id, String nome, String senha, String email, Boolean status, String localidade) {
+    public Usuario(Integer id, String nome, String senha, String email, Boolean status, String localidade, int qntvisitante) {
         this.id = id;
         this.nome = nome;
         this.senha = senha;
         this.email = email;
         this.status = status;
         this.localidade = localidade;
+        this.qntvisitante = qntvisitante;
     }
 
     public Integer getId() {
@@ -145,12 +173,21 @@ public class Usuario implements Serializable {
         this.localidade = localidade;
     }
 
-    public Integer getQntvisitante() {
+    public int getQntvisitante() {
         return qntvisitante;
     }
 
-    public void setQntvisitante(Integer qntvisitante) {
+    public void setQntvisitante(int qntvisitante) {
         this.qntvisitante = qntvisitante;
+    }
+
+    @XmlTransient
+    public List<Saida> getSaidaList() {
+        return saidaList;
+    }
+
+    public void setSaidaList(List<Saida> saidaList) {
+        this.saidaList = saidaList;
     }
 
     @XmlTransient
@@ -169,6 +206,77 @@ public class Usuario implements Serializable {
 
     public void setUsuarioList1(List<Usuario> usuarioList1) {
         this.usuarioList1 = usuarioList1;
+    }
+
+    @XmlTransient
+    public List<Avaliacaoamizade> getAvaliacaoamizadeList() {
+        return avaliacaoamizadeList;
+    }
+
+    public void setAvaliacaoamizadeList(List<Avaliacaoamizade> avaliacaoamizadeList) {
+        this.avaliacaoamizadeList = avaliacaoamizadeList;
+    }
+
+    @XmlTransient
+    public List<Avaliacaoamizade> getAvaliacaoamizadeList1() {
+        return avaliacaoamizadeList1;
+    }
+
+    public void setAvaliacaoamizadeList1(List<Avaliacaoamizade> avaliacaoamizadeList1) {
+        this.avaliacaoamizadeList1 = avaliacaoamizadeList1;
+    }
+
+    @XmlTransient
+    public List<Saida> getSaidaList1() {
+        return saidaList1;
+    }
+
+    public void setSaidaList1(List<Saida> saidaList1) {
+        this.saidaList1 = saidaList1;
+    }
+
+    @XmlTransient
+    public List<Avaliacaohospedagem> getAvaliacaohospedagemList() {
+        return avaliacaohospedagemList;
+    }
+
+    public void setAvaliacaohospedagemList(List<Avaliacaohospedagem> avaliacaohospedagemList) {
+        this.avaliacaohospedagemList = avaliacaohospedagemList;
+    }
+
+    @XmlTransient
+    public List<Avaliacaohospedagem> getAvaliacaohospedagemList1() {
+        return avaliacaohospedagemList1;
+    }
+
+    public void setAvaliacaohospedagemList1(List<Avaliacaohospedagem> avaliacaohospedagemList1) {
+        this.avaliacaohospedagemList1 = avaliacaohospedagemList1;
+    }
+
+    @XmlTransient
+    public List<Avaliacaoesporte> getAvaliacaoesporteList() {
+        return avaliacaoesporteList;
+    }
+
+    public void setAvaliacaoesporteList(List<Avaliacaoesporte> avaliacaoesporteList) {
+        this.avaliacaoesporteList = avaliacaoesporteList;
+    }
+
+    @XmlTransient
+    public List<Avaliacaoesporte> getAvaliacaoesporteList1() {
+        return avaliacaoesporteList1;
+    }
+
+    public void setAvaliacaoesporteList1(List<Avaliacaoesporte> avaliacaoesporteList1) {
+        this.avaliacaoesporteList1 = avaliacaoesporteList1;
+    }
+
+    public Esporte getEsporteId() {
+        return esporteId;
+    }
+
+    public void setEsporteId(Esporte esporteId) {
+        this.esporteId = esporteId;
     }
 
     @Override
@@ -193,7 +301,7 @@ public class Usuario implements Serializable {
 
     @Override
     public String toString() {
-        return "model.Usuario[ id=" + id + " ]";
+        return "Model.Usuario[ id=" + id + " ]";
     }
     
 }

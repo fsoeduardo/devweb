@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package model;
+package Model;
 
 import java.io.Serializable;
 import javax.persistence.Basic;
@@ -24,46 +24,43 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Ricardo Junior
  */
 @Entity
-@Table(catalog = "", schema = "USUARIO")
+@Table(name = "AVALIACAOAMIZADE")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Avaliacao.findAll", query = "SELECT a FROM Avaliacao a")
-    , @NamedQuery(name = "Avaliacao.findById", query = "SELECT a FROM Avaliacao a WHERE a.id = :id")
-    , @NamedQuery(name = "Avaliacao.findByText", query = "SELECT a FROM Avaliacao a WHERE a.text = :text")
-    , @NamedQuery(name = "Avaliacao.findByNota", query = "SELECT a FROM Avaliacao a WHERE a.nota = :nota")})
-public class Avaliacao implements Serializable {
+    @NamedQuery(name = "Avaliacaoamizade.findAll", query = "SELECT a FROM Avaliacaoamizade a")
+    , @NamedQuery(name = "Avaliacaoamizade.findById", query = "SELECT a FROM Avaliacaoamizade a WHERE a.id = :id")
+    , @NamedQuery(name = "Avaliacaoamizade.findByText", query = "SELECT a FROM Avaliacaoamizade a WHERE a.text = :text")
+    , @NamedQuery(name = "Avaliacaoamizade.findByNota", query = "SELECT a FROM Avaliacaoamizade a WHERE a.nota = :nota")})
+public class Avaliacaoamizade implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
     @NotNull
-    @Column(nullable = false)
+    @Column(name = "ID")
     private Integer id;
     @Size(max = 255)
-    @Column(length = 255)
+    @Column(name = "TEXT")
     private String text;
     @Basic(optional = false)
     @NotNull
-    @Column(nullable = false)
+    @Column(name = "NOTA")
     private int nota;
-    @JoinColumn(name = "TIPO", referencedColumnName = "ID", nullable = false)
-    @ManyToOne(optional = false)
-    private Tipo tipo;
-    @JoinColumn(name = "USER_FAZ", referencedColumnName = "ID", nullable = false)
+    @JoinColumn(name = "USER_FAZ", referencedColumnName = "ID")
     @ManyToOne(optional = false)
     private Usuario userFaz;
-    @JoinColumn(name = "USER_RECEBE", referencedColumnName = "ID", nullable = false)
+    @JoinColumn(name = "USER_RECEBE", referencedColumnName = "ID")
     @ManyToOne(optional = false)
     private Usuario userRecebe;
 
-    public Avaliacao() {
+    public Avaliacaoamizade() {
     }
 
-    public Avaliacao(Integer id) {
+    public Avaliacaoamizade(Integer id) {
         this.id = id;
     }
 
-    public Avaliacao(Integer id, int nota) {
+    public Avaliacaoamizade(Integer id, int nota) {
         this.id = id;
         this.nota = nota;
     }
@@ -92,14 +89,6 @@ public class Avaliacao implements Serializable {
         this.nota = nota;
     }
 
-    public Tipo getTipo() {
-        return tipo;
-    }
-
-    public void setTipo(Tipo tipo) {
-        this.tipo = tipo;
-    }
-
     public Usuario getUserFaz() {
         return userFaz;
     }
@@ -126,10 +115,10 @@ public class Avaliacao implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Avaliacao)) {
+        if (!(object instanceof Avaliacaoamizade)) {
             return false;
         }
-        Avaliacao other = (Avaliacao) object;
+        Avaliacaoamizade other = (Avaliacaoamizade) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -138,7 +127,7 @@ public class Avaliacao implements Serializable {
 
     @Override
     public String toString() {
-        return "model.Avaliacao[ id=" + id + " ]";
+        return "Model.Avaliacaoamizade[ id=" + id + " ]";
     }
     
 }
