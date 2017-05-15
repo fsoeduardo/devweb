@@ -1,14 +1,23 @@
-
 Create Table Esporte (
-id integer Not Null,
-nome char(15),
-Primary Key (id)
+    id integer Not Null,
+    nome varchar(15),
+    Primary Key (id)
 )
 
-Create Table Tipo (
-id integer Not Null,
-nome char(15),
-Primary Key (id)
+Create Table estado (
+    id integer Not Null,
+    nome varchar(15) Not Null,
+    pais_fk integer Not Null,
+    Primary Key (id),
+    Foreign Key (pais_fk) references pais
+)
+
+Create Table cidade (
+    id integer Not Null,
+    nome varchar(15) Not Null,
+    estado_fk integer Not Null,
+    Primary Key (id),
+    Foreign Key (estado_fk) references estado
 )
 
 Create table Usuario (
@@ -16,46 +25,111 @@ id integer Not Null,
 nome  varchar(40) Not Null,
 senha  varchar(40) Not Null,
 email  varchar(40) Not Null,
-status boolean Not Null,
-localidade  varchar(40) Not Null,
-qntvisitante integer,
-esporte_id integer Not Null,
+cpf  varchar(11) Not Null,
+telefone  varchar(11) Not Null,
+recebe_visita boolean Not Null,
+rua  varchar(40) Not Null,
+numero  integer,
+bairro  varchar(40) Not Null,
+complemento varchar(40),
+cidade_fk integer Not Null,
+max_visitante integer,
+min_visitante integer,
+esporte_fk integer Not Null,
 Primary Key (id),
-FOREIGN KEY (esporte_id) REFERENCES esporte (id)
-)
-
-
-Create table AvaliacaoComposta (
-id integer Not Null,
-textohospedagem varchar(255) ,
-textohospedero  varchar(255) ,
-tipo integer Not Null,
-nota integer Not Null,
-status boolean Not Null,
-hospedero_id integer Not Null,
-hospedado_id integer Not Null,
-Primary Key (id),
-FOREIGN KEY (hospedero_id) REFERENCES usuario (id),
-FOREIGN KEY (hospedado_id) REFERENCES usuario (id),
-FOREIGN KEY (tipo) REFERENCES Tipo (id)
+FOREIGN KEY (esporte_fk) REFERENCES esporte (id),
+FOREIGN KEY (cidade_fk) REFERENCES cidade
 )
 
 Create Table AMIZADE (
-user_id integer Not Null,
-amigo_id integer Not Null,
-Primary Key (amigo_id, user_id)
+user1_id integer Not Null,
+user2_id integer Not Null,
+Primary Key (user1_id, user2_id),
+foreign key (user1_id) references usuario,
+foreign key (user2_id) references usuario
 )
 
-Create table Avaliacao (
+
+Create table AvaliacaoAmizade (
 id integer Not Null,
 text varchar(255) ,
-tipo integer Not Null,
 nota integer Not Null,
-user_faz integer Not Null,
-user_recebe integer Not Null,
+avaliador_fk integer Not Null,
+avaliado_fk integer Not Null,
 Primary Key (id),
-FOREIGN KEY (user_recebe) REFERENCES usuario (id),
-FOREIGN KEY (user_faz) REFERENCES usuario (id),
-FOREIGN KEY (tipo) REFERENCES Tipo (id)
+FOREIGN KEY (avaliador_fk) REFERENCES usuario (id),
+FOREIGN KEY (avaliado_fk) REFERENCES usuario (id)
 )
 
+Create table saida (
+    id integer Not Null,
+    anfitriao_fk integer Not Null,
+    esporte_fk integer Not null,
+    cidade_fk integer not null,
+    duracao double not null,
+    custo double not null,
+    qtd_max integer not null,
+    qtd_min integer not null,
+    descricao varchar(200) not null,
+    rua  varchar(40) Not Null,
+    numero  integer,
+    bairro  varchar(40),
+    complemento varchar(40),
+    Primary Key (id),
+    FOREIGN KEY (anfitriao_fk) REFERENCES usuario (id),
+    FOREIGN KEY (esporte_fk) REFERENCES esporte,
+    FOREIGN KEY (cidade_fk) REFERENCES cidade,
+)
+
+
+Create table SaidaUsuario (
+saida_fk integer Not Null,
+user_fk integer Not Null,
+Primary Key (saida_fk,user_fk),
+FOREIGN KEY (saida_fk) REFERENCES saida,
+FOREIGN KEY (user_fk) REFERENCES usuario (id)
+)
+
+Create table AvaliacaoSaida (
+id integer Not Null,
+text varchar(255) ,
+nota integer Not Null,
+avaliador_fk integer Not Null,
+avaliado_fk integer Not Null,
+saida_fk integer Not Null,
+Primary Key (id),
+FOREIGN KEY (saida_fk) REFERENCES saida,
+FOREIGN KEY (avaliador_fk) REFERENCES usuario (id),
+FOREIGN KEY (avaliado_fk) REFERENCES usuario (id)
+)
+
+
+Create table hospedagem (
+id integer Not Null,
+anfitriao_id integer Not Null,
+data_inicio date not null,
+data_termino date not null,
+qtd_hospedes integer not null, 
+situacao_anfitriao boolean, 
+justificativa varchar(40), 
+confirmacao_solicitante boolean,
+solicitante_id integer Not Null,
+Primary Key (id),
+FOREIGN KEY (anfitriao_id) REFERENCES usuario (id),
+FOREIGN KEY (solicitante_id) REFERENCES usuario (id)
+)
+
+Create table AvaliacaoHospedagem (
+id integer Not Null,
+ava_anfitriao_text varchar(255) ,
+ava_hospede_text varchar(255) ,
+nota_anfitriao integer,
+nota_hospede integer,
+anfitriao_fk integer Not Null,
+hospede_fk integer Not Null,
+hospedagem_fk integer Not Null,
+Primary Key (id),
+FOREIGN KEY (hospedagem_fk) REFERENCES hospedagem,
+FOREIGN KEY (hospede_fk) REFERENCES usuario (id),
+FOREIGN KEY (anfitriao_fk) REFERENCES usuario (id)
+)

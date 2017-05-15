@@ -13,6 +13,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
@@ -34,13 +35,15 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Saida.findAll", query = "SELECT s FROM Saida s")
     , @NamedQuery(name = "Saida.findById", query = "SELECT s FROM Saida s WHERE s.id = :id")
-    , @NamedQuery(name = "Saida.findByLocalidade", query = "SELECT s FROM Saida s WHERE s.localidade = :localidade")
-    , @NamedQuery(name = "Saida.findByDescricao", query = "SELECT s FROM Saida s WHERE s.descricao = :descricao")
-    , @NamedQuery(name = "Saida.findByStatus", query = "SELECT s FROM Saida s WHERE s.status = :status")
     , @NamedQuery(name = "Saida.findByDuracao", query = "SELECT s FROM Saida s WHERE s.duracao = :duracao")
     , @NamedQuery(name = "Saida.findByCusto", query = "SELECT s FROM Saida s WHERE s.custo = :custo")
-    , @NamedQuery(name = "Saida.findByNumMax", query = "SELECT s FROM Saida s WHERE s.numMax = :numMax")
-    , @NamedQuery(name = "Saida.findByNumMin", query = "SELECT s FROM Saida s WHERE s.numMin = :numMin")})
+    , @NamedQuery(name = "Saida.findByQtdMax", query = "SELECT s FROM Saida s WHERE s.qtdMax = :qtdMax")
+    , @NamedQuery(name = "Saida.findByQtdMin", query = "SELECT s FROM Saida s WHERE s.qtdMin = :qtdMin")
+    , @NamedQuery(name = "Saida.findByDescricao", query = "SELECT s FROM Saida s WHERE s.descricao = :descricao")
+    , @NamedQuery(name = "Saida.findByRua", query = "SELECT s FROM Saida s WHERE s.rua = :rua")
+    , @NamedQuery(name = "Saida.findByNumero", query = "SELECT s FROM Saida s WHERE s.numero = :numero")
+    , @NamedQuery(name = "Saida.findByBairro", query = "SELECT s FROM Saida s WHERE s.bairro = :bairro")
+    , @NamedQuery(name = "Saida.findByComplemento", query = "SELECT s FROM Saida s WHERE s.complemento = :complemento")})
 public class Saida implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -49,39 +52,56 @@ public class Saida implements Serializable {
     @NotNull
     @Column(name = "ID")
     private Integer id;
-    @Size(max = 64)
-    @Column(name = "LOCALIDADE")
-    private String localidade;
-    @Size(max = 255)
-    @Column(name = "DESCRICAO")
-    private String descricao;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "STATUS")
-    private Boolean status;
     @Basic(optional = false)
     @NotNull
     @Column(name = "DURACAO")
-    private int duracao;
+    private double duracao;
     @Basic(optional = false)
     @NotNull
     @Column(name = "CUSTO")
     private double custo;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "NUM_MAX")
-    private int numMax;
+    @Column(name = "QTD_MAX")
+    private int qtdMax;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "NUM_MIN")
-    private int numMin;
-    @ManyToMany(mappedBy = "saidaList")
+    @Column(name = "QTD_MIN")
+    private int qtdMin;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 200)
+    @Column(name = "DESCRICAO")
+    private String descricao;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 40)
+    @Column(name = "RUA")
+    private String rua;
+    @Column(name = "NUMERO")
+    private Integer numero;
+    @Size(max = 40)
+    @Column(name = "BAIRRO")
+    private String bairro;
+    @Size(max = 40)
+    @Column(name = "COMPLEMENTO")
+    private String complemento;
+    @JoinTable(name = "SAIDAUSUARIO", joinColumns = {
+        @JoinColumn(name = "SAIDA_FK", referencedColumnName = "ID")}, inverseJoinColumns = {
+        @JoinColumn(name = "USER_FK", referencedColumnName = "ID")})
+    @ManyToMany
     private List<Usuario> usuarioList;
-    @JoinColumn(name = "USER_FAZ", referencedColumnName = "ID")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "saidaFk")
+    private List<Avaliacaosaida> avaliacaosaidaList;
+    @JoinColumn(name = "CIDADE_FK", referencedColumnName = "ID")
     @ManyToOne(optional = false)
-    private Usuario userFaz;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "saidaId")
-    private List<Avaliacaoesporte> avaliacaoesporteList;
+    private Cidade cidadeFk;
+    @JoinColumn(name = "ESPORTE_FK", referencedColumnName = "ID")
+    @ManyToOne(optional = false)
+    private Esporte esporteFk;
+    @JoinColumn(name = "ANFITRIAO_FK", referencedColumnName = "ID")
+    @ManyToOne(optional = false)
+    private Usuario anfitriaoFk;
 
     public Saida() {
     }
@@ -90,13 +110,14 @@ public class Saida implements Serializable {
         this.id = id;
     }
 
-    public Saida(Integer id, Boolean status, int duracao, double custo, int numMax, int numMin) {
+    public Saida(Integer id, double duracao, double custo, int qtdMax, int qtdMin, String descricao, String rua) {
         this.id = id;
-        this.status = status;
         this.duracao = duracao;
         this.custo = custo;
-        this.numMax = numMax;
-        this.numMin = numMin;
+        this.qtdMax = qtdMax;
+        this.qtdMin = qtdMin;
+        this.descricao = descricao;
+        this.rua = rua;
     }
 
     public Integer getId() {
@@ -107,35 +128,11 @@ public class Saida implements Serializable {
         this.id = id;
     }
 
-    public String getLocalidade() {
-        return localidade;
-    }
-
-    public void setLocalidade(String localidade) {
-        this.localidade = localidade;
-    }
-
-    public String getDescricao() {
-        return descricao;
-    }
-
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
-    }
-
-    public Boolean getStatus() {
-        return status;
-    }
-
-    public void setStatus(Boolean status) {
-        this.status = status;
-    }
-
-    public int getDuracao() {
+    public double getDuracao() {
         return duracao;
     }
 
-    public void setDuracao(int duracao) {
+    public void setDuracao(double duracao) {
         this.duracao = duracao;
     }
 
@@ -147,20 +144,60 @@ public class Saida implements Serializable {
         this.custo = custo;
     }
 
-    public int getNumMax() {
-        return numMax;
+    public int getQtdMax() {
+        return qtdMax;
     }
 
-    public void setNumMax(int numMax) {
-        this.numMax = numMax;
+    public void setQtdMax(int qtdMax) {
+        this.qtdMax = qtdMax;
     }
 
-    public int getNumMin() {
-        return numMin;
+    public int getQtdMin() {
+        return qtdMin;
     }
 
-    public void setNumMin(int numMin) {
-        this.numMin = numMin;
+    public void setQtdMin(int qtdMin) {
+        this.qtdMin = qtdMin;
+    }
+
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
+    }
+
+    public String getRua() {
+        return rua;
+    }
+
+    public void setRua(String rua) {
+        this.rua = rua;
+    }
+
+    public Integer getNumero() {
+        return numero;
+    }
+
+    public void setNumero(Integer numero) {
+        this.numero = numero;
+    }
+
+    public String getBairro() {
+        return bairro;
+    }
+
+    public void setBairro(String bairro) {
+        this.bairro = bairro;
+    }
+
+    public String getComplemento() {
+        return complemento;
+    }
+
+    public void setComplemento(String complemento) {
+        this.complemento = complemento;
     }
 
     @XmlTransient
@@ -172,21 +209,37 @@ public class Saida implements Serializable {
         this.usuarioList = usuarioList;
     }
 
-    public Usuario getUserFaz() {
-        return userFaz;
-    }
-
-    public void setUserFaz(Usuario userFaz) {
-        this.userFaz = userFaz;
-    }
-
     @XmlTransient
-    public List<Avaliacaoesporte> getAvaliacaoesporteList() {
-        return avaliacaoesporteList;
+    public List<Avaliacaosaida> getAvaliacaosaidaList() {
+        return avaliacaosaidaList;
     }
 
-    public void setAvaliacaoesporteList(List<Avaliacaoesporte> avaliacaoesporteList) {
-        this.avaliacaoesporteList = avaliacaoesporteList;
+    public void setAvaliacaosaidaList(List<Avaliacaosaida> avaliacaosaidaList) {
+        this.avaliacaosaidaList = avaliacaosaidaList;
+    }
+
+    public Cidade getCidadeFk() {
+        return cidadeFk;
+    }
+
+    public void setCidadeFk(Cidade cidadeFk) {
+        this.cidadeFk = cidadeFk;
+    }
+
+    public Esporte getEsporteFk() {
+        return esporteFk;
+    }
+
+    public void setEsporteFk(Esporte esporteFk) {
+        this.esporteFk = esporteFk;
+    }
+
+    public Usuario getAnfitriaoFk() {
+        return anfitriaoFk;
+    }
+
+    public void setAnfitriaoFk(Usuario anfitriaoFk) {
+        this.anfitriaoFk = anfitriaoFk;
     }
 
     @Override

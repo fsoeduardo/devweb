@@ -40,10 +40,14 @@ public class Esporte implements Serializable {
     @NotNull
     @Column(name = "ID")
     private Integer id;
-    @Size(max = 30)
+    @Size(max = 15)
     @Column(name = "NOME")
     private String nome;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "esporteId")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "esporte")
+    private List<Hospedagemesporte> hospedagemesporteList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "esporteFk")
+    private List<Saida> saidaList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "esporteFk")
     private List<Usuario> usuarioList;
 
     public Esporte() {
@@ -67,6 +71,24 @@ public class Esporte implements Serializable {
 
     public void setNome(String nome) {
         this.nome = nome;
+    }
+
+    @XmlTransient
+    public List<Hospedagemesporte> getHospedagemesporteList() {
+        return hospedagemesporteList;
+    }
+
+    public void setHospedagemesporteList(List<Hospedagemesporte> hospedagemesporteList) {
+        this.hospedagemesporteList = hospedagemesporteList;
+    }
+
+    @XmlTransient
+    public List<Saida> getSaidaList() {
+        return saidaList;
+    }
+
+    public void setSaidaList(List<Saida> saidaList) {
+        this.saidaList = saidaList;
     }
 
     @XmlTransient

@@ -38,9 +38,15 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Usuario.findByNome", query = "SELECT u FROM Usuario u WHERE u.nome = :nome")
     , @NamedQuery(name = "Usuario.findBySenha", query = "SELECT u FROM Usuario u WHERE u.senha = :senha")
     , @NamedQuery(name = "Usuario.findByEmail", query = "SELECT u FROM Usuario u WHERE u.email = :email")
-    , @NamedQuery(name = "Usuario.findByStatus", query = "SELECT u FROM Usuario u WHERE u.status = :status")
-    , @NamedQuery(name = "Usuario.findByLocalidade", query = "SELECT u FROM Usuario u WHERE u.localidade = :localidade")
-    , @NamedQuery(name = "Usuario.findByQntvisitante", query = "SELECT u FROM Usuario u WHERE u.qntvisitante = :qntvisitante")})
+    , @NamedQuery(name = "Usuario.findByCpf", query = "SELECT u FROM Usuario u WHERE u.cpf = :cpf")
+    , @NamedQuery(name = "Usuario.findByTelefone", query = "SELECT u FROM Usuario u WHERE u.telefone = :telefone")
+    , @NamedQuery(name = "Usuario.findByRecebeVisita", query = "SELECT u FROM Usuario u WHERE u.recebeVisita = :recebeVisita")
+    , @NamedQuery(name = "Usuario.findByRua", query = "SELECT u FROM Usuario u WHERE u.rua = :rua")
+    , @NamedQuery(name = "Usuario.findByNumero", query = "SELECT u FROM Usuario u WHERE u.numero = :numero")
+    , @NamedQuery(name = "Usuario.findByBairro", query = "SELECT u FROM Usuario u WHERE u.bairro = :bairro")
+    , @NamedQuery(name = "Usuario.findByComplemento", query = "SELECT u FROM Usuario u WHERE u.complemento = :complemento")
+    , @NamedQuery(name = "Usuario.findByMaxVisitante", query = "SELECT u FROM Usuario u WHERE u.maxVisitante = :maxVisitante")
+    , @NamedQuery(name = "Usuario.findByMinVisitante", query = "SELECT u FROM Usuario u WHERE u.minVisitante = :minVisitante")})
 public class Usuario implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -51,62 +57,86 @@ public class Usuario implements Serializable {
     private Integer id;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 64)
+    @Size(min = 1, max = 40)
     @Column(name = "NOME")
     private String nome;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 64)
+    @Size(min = 1, max = 40)
     @Column(name = "SENHA")
     private String senha;
     // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="E-mail inválido")//if the field contains email address consider using this annotation to enforce field validation
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 64)
+    @Size(min = 1, max = 40)
     @Column(name = "EMAIL")
     private String email;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "STATUS")
-    private Boolean status;
+    @Size(min = 1, max = 11)
+    @Column(name = "CPF")
+    private String cpf;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 64)
-    @Column(name = "LOCALIDADE")
-    private String localidade;
+    @Size(min = 1, max = 11)
+    @Column(name = "TELEFONE")
+    private String telefone;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "QNTVISITANTE")
-    private int qntvisitante;
-    @JoinTable(name = "SAIDAUSUARIO", joinColumns = {
-        @JoinColumn(name = "USER_ID", referencedColumnName = "ID")}, inverseJoinColumns = {
-        @JoinColumn(name = "SAIDA_ID", referencedColumnName = "ID")})
-    @ManyToMany
+    @Column(name = "RECEBE_VISITA")
+    private Boolean recebeVisita;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 40)
+    @Column(name = "RUA")
+    private String rua;
+    @Column(name = "NUMERO")
+    private Integer numero;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 40)
+    @Column(name = "BAIRRO")
+    private String bairro;
+    @Size(max = 40)
+    @Column(name = "COMPLEMENTO")
+    private String complemento;
+    @Column(name = "MAX_VISITANTE")
+    private Integer maxVisitante;
+    @Column(name = "MIN_VISITANTE")
+    private Integer minVisitante;
+    @ManyToMany(mappedBy = "usuarioList")
     private List<Saida> saidaList;
     @JoinTable(name = "AMIZADE", joinColumns = {
-        @JoinColumn(name = "AMIGO_ID", referencedColumnName = "ID")}, inverseJoinColumns = {
-        @JoinColumn(name = "USER_ID", referencedColumnName = "ID")})
+        @JoinColumn(name = "USER1_ID", referencedColumnName = "ID")}, inverseJoinColumns = {
+        @JoinColumn(name = "USER2_ID", referencedColumnName = "ID")})
     @ManyToMany
     private List<Usuario> usuarioList;
     @ManyToMany(mappedBy = "usuarioList")
     private List<Usuario> usuarioList1;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userFaz")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "avaliadoFk")
     private List<Avaliacaoamizade> avaliacaoamizadeList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userRecebe")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "avaliadorFk")
     private List<Avaliacaoamizade> avaliacaoamizadeList1;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userFaz")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "solicitanteId")
+    private List<Hospedagem> hospedagemList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "anfitriaoId")
+    private List<Hospedagem> hospedagemList1;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "avaliadoFk")
+    private List<Avaliacaosaida> avaliacaosaidaList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "avaliadorFk")
+    private List<Avaliacaosaida> avaliacaosaidaList1;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "anfitriaoFk")
     private List<Saida> saidaList1;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "hospedadoId")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "anfitriaoFk")
     private List<Avaliacaohospedagem> avaliacaohospedagemList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "hospedeiroId")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "hospedeFk")
     private List<Avaliacaohospedagem> avaliacaohospedagemList1;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userRecebe")
-    private List<Avaliacaoesporte> avaliacaoesporteList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userFaz")
-    private List<Avaliacaoesporte> avaliacaoesporteList1;
-    @JoinColumn(name = "ESPORTE_ID", referencedColumnName = "ID")
+    @JoinColumn(name = "CIDADE_FK", referencedColumnName = "ID")
     @ManyToOne(optional = false)
-    private Esporte esporteId;
+    private Cidade cidadeFk;
+    @JoinColumn(name = "ESPORTE_FK", referencedColumnName = "ID")
+    @ManyToOne(optional = false)
+    private Esporte esporteFk;
 
     public Usuario() {
     }
@@ -115,14 +145,16 @@ public class Usuario implements Serializable {
         this.id = id;
     }
 
-    public Usuario(Integer id, String nome, String senha, String email, Boolean status, String localidade, int qntvisitante) {
+    public Usuario(Integer id, String nome, String senha, String email, String cpf, String telefone, Boolean recebeVisita, String rua, String bairro) {
         this.id = id;
         this.nome = nome;
         this.senha = senha;
         this.email = email;
-        this.status = status;
-        this.localidade = localidade;
-        this.qntvisitante = qntvisitante;
+        this.cpf = cpf;
+        this.telefone = telefone;
+        this.recebeVisita = recebeVisita;
+        this.rua = rua;
+        this.bairro = bairro;
     }
 
     public Integer getId() {
@@ -157,28 +189,76 @@ public class Usuario implements Serializable {
         this.email = email;
     }
 
-    public Boolean getStatus() {
-        return status;
+    public String getCpf() {
+        return cpf;
     }
 
-    public void setStatus(Boolean status) {
-        this.status = status;
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
     }
 
-    public String getLocalidade() {
-        return localidade;
+    public String getTelefone() {
+        return telefone;
     }
 
-    public void setLocalidade(String localidade) {
-        this.localidade = localidade;
+    public void setTelefone(String telefone) {
+        this.telefone = telefone;
     }
 
-    public int getQntvisitante() {
-        return qntvisitante;
+    public Boolean getRecebeVisita() {
+        return recebeVisita;
     }
 
-    public void setQntvisitante(int qntvisitante) {
-        this.qntvisitante = qntvisitante;
+    public void setRecebeVisita(Boolean recebeVisita) {
+        this.recebeVisita = recebeVisita;
+    }
+
+    public String getRua() {
+        return rua;
+    }
+
+    public void setRua(String rua) {
+        this.rua = rua;
+    }
+
+    public Integer getNumero() {
+        return numero;
+    }
+
+    public void setNumero(Integer numero) {
+        this.numero = numero;
+    }
+
+    public String getBairro() {
+        return bairro;
+    }
+
+    public void setBairro(String bairro) {
+        this.bairro = bairro;
+    }
+
+    public String getComplemento() {
+        return complemento;
+    }
+
+    public void setComplemento(String complemento) {
+        this.complemento = complemento;
+    }
+
+    public Integer getMaxVisitante() {
+        return maxVisitante;
+    }
+
+    public void setMaxVisitante(Integer maxVisitante) {
+        this.maxVisitante = maxVisitante;
+    }
+
+    public Integer getMinVisitante() {
+        return minVisitante;
+    }
+
+    public void setMinVisitante(Integer minVisitante) {
+        this.minVisitante = minVisitante;
     }
 
     @XmlTransient
@@ -227,6 +307,42 @@ public class Usuario implements Serializable {
     }
 
     @XmlTransient
+    public List<Hospedagem> getHospedagemList() {
+        return hospedagemList;
+    }
+
+    public void setHospedagemList(List<Hospedagem> hospedagemList) {
+        this.hospedagemList = hospedagemList;
+    }
+
+    @XmlTransient
+    public List<Hospedagem> getHospedagemList1() {
+        return hospedagemList1;
+    }
+
+    public void setHospedagemList1(List<Hospedagem> hospedagemList1) {
+        this.hospedagemList1 = hospedagemList1;
+    }
+
+    @XmlTransient
+    public List<Avaliacaosaida> getAvaliacaosaidaList() {
+        return avaliacaosaidaList;
+    }
+
+    public void setAvaliacaosaidaList(List<Avaliacaosaida> avaliacaosaidaList) {
+        this.avaliacaosaidaList = avaliacaosaidaList;
+    }
+
+    @XmlTransient
+    public List<Avaliacaosaida> getAvaliacaosaidaList1() {
+        return avaliacaosaidaList1;
+    }
+
+    public void setAvaliacaosaidaList1(List<Avaliacaosaida> avaliacaosaidaList1) {
+        this.avaliacaosaidaList1 = avaliacaosaidaList1;
+    }
+
+    @XmlTransient
     public List<Saida> getSaidaList1() {
         return saidaList1;
     }
@@ -253,30 +369,20 @@ public class Usuario implements Serializable {
         this.avaliacaohospedagemList1 = avaliacaohospedagemList1;
     }
 
-    @XmlTransient
-    public List<Avaliacaoesporte> getAvaliacaoesporteList() {
-        return avaliacaoesporteList;
+    public Cidade getCidadeFk() {
+        return cidadeFk;
     }
 
-    public void setAvaliacaoesporteList(List<Avaliacaoesporte> avaliacaoesporteList) {
-        this.avaliacaoesporteList = avaliacaoesporteList;
+    public void setCidadeFk(Cidade cidadeFk) {
+        this.cidadeFk = cidadeFk;
     }
 
-    @XmlTransient
-    public List<Avaliacaoesporte> getAvaliacaoesporteList1() {
-        return avaliacaoesporteList1;
+    public Esporte getEsporteFk() {
+        return esporteFk;
     }
 
-    public void setAvaliacaoesporteList1(List<Avaliacaoesporte> avaliacaoesporteList1) {
-        this.avaliacaoesporteList1 = avaliacaoesporteList1;
-    }
-
-    public Esporte getEsporteId() {
-        return esporteId;
-    }
-
-    public void setEsporteId(Esporte esporteId) {
-        this.esporteId = esporteId;
+    public void setEsporteFk(Esporte esporteFk) {
+        this.esporteFk = esporteFk;
     }
 
     @Override

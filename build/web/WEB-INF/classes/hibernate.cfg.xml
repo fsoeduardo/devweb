@@ -43,15 +43,21 @@ Contributor(s):
   <session-factory>
     <property name="hibernate.dialect">org.hibernate.dialect.DerbyDialect</property>
     <property name="hibernate.connection.driver_class">org.apache.derby.jdbc.ClientDriver</property>
+    <property name="hibernate.connection.url">jdbc:derby://localhost:1527/DW 2.0</property>
     <property name="hibernate.connection.username">usuario</property>
     <property name="hibernate.connection.password">123</property>
     <property name="hibernate.connection.pool_size">1</property>
-    <property name="hibernate.connection.url">jdbc:derby://localhost:1527/Trabdw</property>
-    <mapping class="Model.Usuario" />
-    <mapping class="Model.Avaliacaoamizade" />
-    <mapping class="Model.Avaliacaoesporte" />
-    <mapping class="Model.Avaliacaohospedagem" />
-    <mapping class="Model.Esporte" />
-    <mapping class="Model.Saida" />
+    <mapping class="Model.Usuario"/>
+    <mapping class="Model.Cidade"/>
+    <mapping class="Model.Avaliacaohospedagem"/>
+    <mapping class="Model.Avaliacaoamizade"/>
+    <mapping class="Model.Avaliacaosaida"/>
+    <mapping class="Model.Esporte"/>
+    <mapping class="Model.Estado"/>
+    <mapping class="Model.Hospedagem"/>
+    <mapping class="Model.Hospedagemesporte"/>
+    <mapping class="Model.HospedagemesportePK"/>
+    <mapping class="Model.Pais"/>
+    <mapping class="Model.Saida"/>
   </session-factory>
 </hibernate-configuration>

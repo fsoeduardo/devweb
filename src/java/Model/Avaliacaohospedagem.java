@@ -29,11 +29,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "Avaliacaohospedagem.findAll", query = "SELECT a FROM Avaliacaohospedagem a")
     , @NamedQuery(name = "Avaliacaohospedagem.findById", query = "SELECT a FROM Avaliacaohospedagem a WHERE a.id = :id")
-    , @NamedQuery(name = "Avaliacaohospedagem.findByTextohospedeiro", query = "SELECT a FROM Avaliacaohospedagem a WHERE a.textohospedeiro = :textohospedeiro")
-    , @NamedQuery(name = "Avaliacaohospedagem.findByStatus", query = "SELECT a FROM Avaliacaohospedagem a WHERE a.status = :status")
-    , @NamedQuery(name = "Avaliacaohospedagem.findByTextohospedado", query = "SELECT a FROM Avaliacaohospedagem a WHERE a.textohospedado = :textohospedado")
-    , @NamedQuery(name = "Avaliacaohospedagem.findByNotahospedado", query = "SELECT a FROM Avaliacaohospedagem a WHERE a.notahospedado = :notahospedado")
-    , @NamedQuery(name = "Avaliacaohospedagem.findByNotahospedeiro", query = "SELECT a FROM Avaliacaohospedagem a WHERE a.notahospedeiro = :notahospedeiro")})
+    , @NamedQuery(name = "Avaliacaohospedagem.findByAvaAnfitriaoText", query = "SELECT a FROM Avaliacaohospedagem a WHERE a.avaAnfitriaoText = :avaAnfitriaoText")
+    , @NamedQuery(name = "Avaliacaohospedagem.findByAvaHospedeText", query = "SELECT a FROM Avaliacaohospedagem a WHERE a.avaHospedeText = :avaHospedeText")
+    , @NamedQuery(name = "Avaliacaohospedagem.findByNotaAnfitriao", query = "SELECT a FROM Avaliacaohospedagem a WHERE a.notaAnfitriao = :notaAnfitriao")
+    , @NamedQuery(name = "Avaliacaohospedagem.findByNotaHospede", query = "SELECT a FROM Avaliacaohospedagem a WHERE a.notaHospede = :notaHospede")})
 public class Avaliacaohospedagem implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -43,37 +42,30 @@ public class Avaliacaohospedagem implements Serializable {
     @Column(name = "ID")
     private Integer id;
     @Size(max = 255)
-    @Column(name = "TEXTOHOSPEDEIRO")
-    private String textohospedeiro;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "STATUS")
-    private Boolean status;
+    @Column(name = "AVA_ANFITRIAO_TEXT")
+    private String avaAnfitriaoText;
     @Size(max = 255)
-    @Column(name = "TEXTOHOSPEDADO")
-    private String textohospedado;
-    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
-    @Column(name = "NOTAHOSPEDADO")
-    private Double notahospedado;
-    @Column(name = "NOTAHOSPEDEIRO")
-    private Float notahospedeiro;
-    @JoinColumn(name = "HOSPEDADO_ID", referencedColumnName = "ID")
+    @Column(name = "AVA_HOSPEDE_TEXT")
+    private String avaHospedeText;
+    @Column(name = "NOTA_ANFITRIAO")
+    private Integer notaAnfitriao;
+    @Column(name = "NOTA_HOSPEDE")
+    private Integer notaHospede;
+    @JoinColumn(name = "HOSPEDAGEM_FK", referencedColumnName = "ID")
     @ManyToOne(optional = false)
-    private Usuario hospedadoId;
-    @JoinColumn(name = "HOSPEDEIRO_ID", referencedColumnName = "ID")
+    private Hospedagem hospedagemFk;
+    @JoinColumn(name = "ANFITRIAO_FK", referencedColumnName = "ID")
     @ManyToOne(optional = false)
-    private Usuario hospedeiroId;
+    private Usuario anfitriaoFk;
+    @JoinColumn(name = "HOSPEDE_FK", referencedColumnName = "ID")
+    @ManyToOne(optional = false)
+    private Usuario hospedeFk;
 
     public Avaliacaohospedagem() {
     }
 
     public Avaliacaohospedagem(Integer id) {
         this.id = id;
-    }
-
-    public Avaliacaohospedagem(Integer id, Boolean status) {
-        this.id = id;
-        this.status = status;
     }
 
     public Integer getId() {
@@ -84,60 +76,60 @@ public class Avaliacaohospedagem implements Serializable {
         this.id = id;
     }
 
-    public String getTextohospedeiro() {
-        return textohospedeiro;
+    public String getAvaAnfitriaoText() {
+        return avaAnfitriaoText;
     }
 
-    public void setTextohospedeiro(String textohospedeiro) {
-        this.textohospedeiro = textohospedeiro;
+    public void setAvaAnfitriaoText(String avaAnfitriaoText) {
+        this.avaAnfitriaoText = avaAnfitriaoText;
     }
 
-    public Boolean getStatus() {
-        return status;
+    public String getAvaHospedeText() {
+        return avaHospedeText;
     }
 
-    public void setStatus(Boolean status) {
-        this.status = status;
+    public void setAvaHospedeText(String avaHospedeText) {
+        this.avaHospedeText = avaHospedeText;
     }
 
-    public String getTextohospedado() {
-        return textohospedado;
+    public Integer getNotaAnfitriao() {
+        return notaAnfitriao;
     }
 
-    public void setTextohospedado(String textohospedado) {
-        this.textohospedado = textohospedado;
+    public void setNotaAnfitriao(Integer notaAnfitriao) {
+        this.notaAnfitriao = notaAnfitriao;
     }
 
-    public Double getNotahospedado() {
-        return notahospedado;
+    public Integer getNotaHospede() {
+        return notaHospede;
     }
 
-    public void setNotahospedado(Double notahospedado) {
-        this.notahospedado = notahospedado;
+    public void setNotaHospede(Integer notaHospede) {
+        this.notaHospede = notaHospede;
     }
 
-    public Float getNotahospedeiro() {
-        return notahospedeiro;
+    public Hospedagem getHospedagemFk() {
+        return hospedagemFk;
     }
 
-    public void setNotahospedeiro(Float notahospedeiro) {
-        this.notahospedeiro = notahospedeiro;
+    public void setHospedagemFk(Hospedagem hospedagemFk) {
+        this.hospedagemFk = hospedagemFk;
     }
 
-    public Usuario getHospedadoId() {
-        return hospedadoId;
+    public Usuario getAnfitriaoFk() {
+        return anfitriaoFk;
     }
 
-    public void setHospedadoId(Usuario hospedadoId) {
-        this.hospedadoId = hospedadoId;
+    public void setAnfitriaoFk(Usuario anfitriaoFk) {
+        this.anfitriaoFk = anfitriaoFk;
     }
 
-    public Usuario getHospedeiroId() {
-        return hospedeiroId;
+    public Usuario getHospedeFk() {
+        return hospedeFk;
     }
 
-    public void setHospedeiroId(Usuario hospedeiroId) {
-        this.hospedeiroId = hospedeiroId;
+    public void setHospedeFk(Usuario hospedeFk) {
+        this.hospedeFk = hospedeFk;
     }
 
     @Override

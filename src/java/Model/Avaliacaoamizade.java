@@ -46,12 +46,12 @@ public class Avaliacaoamizade implements Serializable {
     @NotNull
     @Column(name = "NOTA")
     private int nota;
-    @JoinColumn(name = "USER_FAZ", referencedColumnName = "ID")
+    @JoinColumn(name = "AVALIADO_FK", referencedColumnName = "ID")
     @ManyToOne(optional = false)
-    private Usuario userFaz;
-    @JoinColumn(name = "USER_RECEBE", referencedColumnName = "ID")
+    private Usuario avaliadoFk;
+    @JoinColumn(name = "AVALIADOR_FK", referencedColumnName = "ID")
     @ManyToOne(optional = false)
-    private Usuario userRecebe;
+    private Usuario avaliadorFk;
 
     public Avaliacaoamizade() {
     }
@@ -89,20 +89,20 @@ public class Avaliacaoamizade implements Serializable {
         this.nota = nota;
     }
 
-    public Usuario getUserFaz() {
-        return userFaz;
+    public Usuario getAvaliadoFk() {
+        return avaliadoFk;
     }
 
-    public void setUserFaz(Usuario userFaz) {
-        this.userFaz = userFaz;
+    public void setAvaliadoFk(Usuario avaliadoFk) {
+        this.avaliadoFk = avaliadoFk;
     }
 
-    public Usuario getUserRecebe() {
-        return userRecebe;
+    public Usuario getAvaliadorFk() {
+        return avaliadorFk;
     }
 
-    public void setUserRecebe(Usuario userRecebe) {
-        this.userRecebe = userRecebe;
+    public void setAvaliadorFk(Usuario avaliadorFk) {
+        this.avaliadorFk = avaliadorFk;
     }
 
     @Override
