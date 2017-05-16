@@ -19,7 +19,7 @@ import org.hibernate.Session;
 public class AvaliacoesDAO {
 
     static public double getmedia(int userid) /* pegar media */ {
-      int somanota = 0;
+      float somanota = 0;
       int cont = 0;
       for (Avaliacaoamizade aux : AvaliacoesDAO.getamizade(userid)){ 
              somanota += aux.getNota();
@@ -37,8 +37,11 @@ public class AvaliacoesDAO {
              somanota += aux.getNota() ;
              cont += 1;
          }
-    
-       float media = somanota/cont;
+        
+       float media = 0; 
+       if (cont>0){
+        media = somanota/cont;
+       }
        return media;
     }
 

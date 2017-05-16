@@ -16,6 +16,7 @@
         <servlet-name>PerfilServlet</servlet-name>
         <url-pattern>/PerfilServlet</url-pattern>
     </servlet-mapping>
+    
     <session-config>
         <session-timeout>
             30

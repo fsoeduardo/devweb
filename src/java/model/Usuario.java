@@ -105,7 +105,7 @@ public class Usuario implements Serializable {
     private Integer maxVisitante;
     @Column(name = "MIN_VISITANTE")
     private Integer minVisitante;
-    @Size(max = 255)
+    @Size(max = 300)
     @Column(name = "DESCRICAO")
     private String descricao;
     @ManyToMany(mappedBy = "usuarioList")
