@@ -46,7 +46,8 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Usuario.findByBairro", query = "SELECT u FROM Usuario u WHERE u.bairro = :bairro")
     , @NamedQuery(name = "Usuario.findByComplemento", query = "SELECT u FROM Usuario u WHERE u.complemento = :complemento")
     , @NamedQuery(name = "Usuario.findByMaxVisitante", query = "SELECT u FROM Usuario u WHERE u.maxVisitante = :maxVisitante")
-    , @NamedQuery(name = "Usuario.findByMinVisitante", query = "SELECT u FROM Usuario u WHERE u.minVisitante = :minVisitante")})
+    , @NamedQuery(name = "Usuario.findByMinVisitante", query = "SELECT u FROM Usuario u WHERE u.minVisitante = :minVisitante")
+    , @NamedQuery(name = "Usuario.findByDescricao", query = "SELECT u FROM Usuario u WHERE u.descricao = :descricao")})
 public class Usuario implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -104,6 +105,9 @@ public class Usuario implements Serializable {
     private Integer maxVisitante;
     @Column(name = "MIN_VISITANTE")
     private Integer minVisitante;
+    @Size(max = 255)
+    @Column(name = "DESCRICAO")
+    private String descricao;
     @ManyToMany(mappedBy = "usuarioList")
     private List<Saida> saidaList;
     @JoinTable(name = "AMIZADE", joinColumns = {
@@ -259,6 +263,14 @@ public class Usuario implements Serializable {
 
     public void setMinVisitante(Integer minVisitante) {
         this.minVisitante = minVisitante;
+    }
+
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
     }
 
     @XmlTransient

@@ -17,6 +17,31 @@ import org.hibernate.Session;
  * @author Ricardo Junior
  */
 public class AvaliacoesDAO {
+
+    static public double getmedia(int userid) /* pegar media */ {
+      int somanota = 0;
+      int cont = 0;
+      for (Avaliacaoamizade aux : AvaliacoesDAO.getamizade(userid)){ 
+             somanota += aux.getNota();
+             cont += 1;
+      }
+      for (Avaliacaohospedagem aux : AvaliacoesDAO.getanfitriao(userid)) {
+             somanota += aux.getNotaAnfitriao() ;
+             cont += 1;
+      }
+      for (Avaliacaohospedagem aux : AvaliacoesDAO.gethospede(userid) ) {
+      somanota += aux.getNotaHospede() ;
+      cont += 1;
+      }
+      for (Avaliacaosaida aux : AvaliacoesDAO.getrecsaida(userid) ) {
+             somanota += aux.getNota() ;
+             cont += 1;
+         }
+    
+       float media = somanota/cont;
+       return media;
+    }
+
     
     static public List<Avaliacaoamizade> getamizade(int userid) /* pegar lista de recomendadocoes de amizade */ {
         Session session = HibernateSessionFactory.getSession();

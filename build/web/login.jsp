@@ -19,11 +19,11 @@
 
 			<!-- Header -->
 				<header id="header" class="alt">
-					<h1 id="logo"><a href="index.html">LOCALHOST <span>Seu site global de hospedagem</span></a></h1>
+					<h1 id="logo"><a href="index.jsp">LOCALHOST <span>Seu site global de hospedagem</span></a></h1>
 					<nav id="nav">
 						<ul>
-							<li class="current"><a href="index.html">Home</a></li>
-							<li class="current"><a href="index.html#main" class="scrolly">Quem Somos</a></li>
+							<li class="current"><a href="index.jsp">Home</a></li>
+							<li class="current"><a href="index.jsp#main" class="scrolly">Quem Somos</a></li>
 							<li><a href="#" class="button special">Login</a></li>
 						</ul>
 					</nav>
