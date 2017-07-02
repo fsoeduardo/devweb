@@ -41,12 +41,12 @@
 							<form action="LoginUsuarioServlet" method="POST">
 										<div class="row 50%">
 											<div class="12u">
-												<input type="text" name="username" placeholder="Email" />
+												<input type="text" name="username" placeholder="Email" required/>
 											</div>
 										</div>
 										<div class="row 50%">
 											<div class="12u">
-												<input type="password" name="password" placeholder="Senha"/>
+												<input type="password" name="password" placeholder="Senha" required/>
 											</div>
 										</div>
 										<div class="row">

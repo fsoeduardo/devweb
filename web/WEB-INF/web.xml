@@ -8,6 +8,10 @@
         <servlet-name>PerfilServlet</servlet-name>
         <servlet-class>Servlets.PerfilServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>buscaservlet</servlet-name>
+        <servlet-class>Servlets.BuscaServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginUsuarioServlet</servlet-name>
         <url-pattern>/LoginUsuarioServlet</url-pattern>
@@ -16,7 +20,10 @@
         <servlet-name>PerfilServlet</servlet-name>
         <url-pattern>/PerfilServlet</url-pattern>
     </servlet-mapping>
-    
+    <servlet-mapping>
+        <servlet-name>buscaservlet</servlet-name>
+        <url-pattern>/buscaservlet</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>
             30
