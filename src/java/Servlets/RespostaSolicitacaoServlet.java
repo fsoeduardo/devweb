@@ -51,10 +51,17 @@ public class RespostaSolicitacaoServlet extends HttpServlet {
         if ("1".equals(request.getParameter("op"))){
             h.setSituacaoAnfitriao(true);
         }
-        else {
+        else if("2".equals(request.getParameter("op"))) {
              h.setSituacaoAnfitriao(false);
         }
+        else if("3".equals(request.getParameter("op"))) {
+             h.setConfirmacaoSolicitante(true);
+        }
+        else {
+             h.setConfirmacaoSolicitante(false);
+        }
         
+            
         session.update(h);
         session.flush();
         tcx.commit();

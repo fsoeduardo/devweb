@@ -80,6 +80,8 @@ public class CriarHospedagemServlet extends HttpServlet {
         session.saveOrUpdate(h);
         session.saveOrUpdate(he);
         tcx.commit();
+        response.sendRedirect("solicitarhospedagem.jsp");
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

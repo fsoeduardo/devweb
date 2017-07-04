@@ -43,22 +43,58 @@
                     <p>Navegue em nosso site e busque a sua hospedagem ideal.</p>
                 </header>
         <%Usuario user = (Usuario) request.getSession().getAttribute("logado");%>
-        <%for (Hospedagem h: SolicitacoesDAO.getsolicitacoes( user.getId() )) {%>
+        <p>A Confirmar:</p>
+        <% if (SolicitacoesDAO.existeconfirmado(user.getId())){ %>
+            <%for (Hospedagem h: SolicitacoesDAO.getpedidosaceitar( user.getId() )) {%>
+                    <% Hospedagemesporte he = SolicitacoesDAO.gethospedagemesporte(h.getId()); %>
+
+                    Data Inicio: <%= h.getDataInicio() %><br>
+                    Data Termino: <%= h.getDataTermino() %><br>
+                    Quantidade de Hospedes: <%= h.getQtdHospedes() %><br>
+                    Anfitriao: <%= h.getAnfitriaoId().getNome() %><br>
+                    Esporte: <%= he.getEsporte().getNome() %><br>
+                    Quantidade de esportistas: <%= he.getQtdEsportista() %><br>
+                    <a href="RespostaSolicitacaoServlet?hospedagem=<%= h.getId() %>&op=3"><button>Confirmar</button></a>
+                    <a href="RespostaSolicitacaoServlet?hospedagem=<%= h.getId() %>&op=4"><button>Recusar</button></a>
+                    <br>
+                    <br>
+            <%}%>        
+        <%}%>
+
+        ____________________________________________________
+
+        <p>Recusados:</p>
+
+        <%for (Hospedagem h: SolicitacoesDAO.getpedidosrecusados( user.getId() )) {%>
                 <% Hospedagemesporte he = SolicitacoesDAO.gethospedagemesporte(h.getId()); %>
                 
                 Data Inicio: <%= h.getDataInicio() %><br>
                 Data Termino: <%= h.getDataTermino() %><br>
                 Quantidade de Hospedes: <%= h.getQtdHospedes() %><br>
-                Solicitante: <%= h.getSolicitanteId().getNome() %><br>
+                Anfitriao: <%= h.getAnfitriaoId().getNome() %><br>
                 Esporte: <%= he.getEsporte().getNome() %><br>
                 Quantidade de esportistas: <%= he.getQtdEsportista() %><br>
-                <a href="RespostaSolicitacaoServlet?hospedagem=<%= h.getId() %>&op=1"><button>Aceitar</button></a>
-                <a href="RespostaSolicitacaoServlet?hospedagem=<%= h.getId() %>&op=2"><button>Recusar</button></a>
                 <br>
-                ____________________________________________________
                 <br>
                 
         <%}%>
+        ____________________________________________________
+        <p>Em Espera:</p>
+
+        <%for (Hospedagem h: SolicitacoesDAO.getpedidosespera( user.getId() )) {%>
+                <% Hospedagemesporte he = SolicitacoesDAO.gethospedagemesporte(h.getId()); %>
+                
+                Data Inicio: <%= h.getDataInicio() %><br>
+                Data Termino: <%= h.getDataTermino() %><br>
+                Quantidade de Hospedes: <%= h.getQtdHospedes() %><br>
+                Anfitriao: <%= h.getAnfitriaoId().getNome() %><br>
+                Esporte: <%= he.getEsporte().getNome() %><br>
+                Quantidade de esportistas: <%= he.getQtdEsportista() %><br>
+                <br>
+                <br>
+                
+        <%}%>
+
             </article>
             <!-- Footer -->
             <footer id="footer">
