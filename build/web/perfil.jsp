@@ -33,6 +33,8 @@
                         <li class="current"><a href="index.jsp#main" class="scrolly">Quem Somos</a></li>
                         <li class="current"><a href="busca.jsp" class="scrolly">Buscar hospedagens</a></li>
                         <li class="current"><a href="pedidodesolicitacoes.jsp" class="scrolly">Pedidos de hospedagens</a></li>
+                        <li class="current"><a href="solicitacoesfeitas.jsp" class="scrolly">Hospedagens solicitadas</a></li>
+
                         <li><a href="login.jsp" class="button special">Sair</a></li>
                     </ul>
                 </nav>

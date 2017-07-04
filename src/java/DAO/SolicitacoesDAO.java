@@ -43,7 +43,7 @@ public class SolicitacoesDAO {
 
     static public boolean existeconfirmado(int userid) {
         Session session = HibernateSessionFactory.getSession();
-        Query query = session.createSQLQuery("SELECT * FROM HOSPEDAGEM WHERE SOLICITANTE_ID = :userid AND SITUACAO_ANFITRIAO = TRUE AND CONFIRMACAO_SOLICITANTE IS TRUE")
+        Query query = session.createSQLQuery("SELECT * FROM HOSPEDAGEM WHERE SOLICITANTE_ID = :userid AND SITUACAO_ANFITRIAO = TRUE AND CONFIRMACAO_SOLICITANTE = TRUE")
                 .addEntity(Hospedagem.class);
         query.setInteger("userid", userid);
         return !query.list().isEmpty();
@@ -65,5 +65,12 @@ public class SolicitacoesDAO {
         List solicitacao = query.list();
         return solicitacao;
     }
-    
+    static public List<Hospedagem> gethospedagem(int userid){
+        Session session = HibernateSessionFactory.getSession();
+        Query query = session.createSQLQuery("SELECT * FROM HOSPEDAGEM WHERE (SOLICITANTE_ID = :userid OR ANFITRIAO_ID = :userid) AND SITUACAO_ANFITRIAO = TRUE AND CONFIRMACAO_SOLICITANTE  = TRUE  AND (NOT EXISTS (SELECT * FROM AVALIACAOHOSPEDAGEM WHERE HOSPEDAGEM_FK = HOSPEDAGEM.ID)) OR ((SELECT AVA_ANFITRIAO_TEXT FROM AVALIACAOHOSPEDAGEM WHERE HOSPEDE_FK = HOSPEDAGEM.SOLICITANTE_ID AND HOSPEDAGEM_FK = HOSPEDAGEM.ID) IS NULL) OR ((SELECT AVA_HOSPEDE_TEXT FROM AVALIACAOHOSPEDAGEM WHERE ANFITRIAO_FK = HOSPEDAGEM.ANFITRIAO_ID AND HOSPEDAGEM_FK = HOSPEDAGEM.ID) IS NULL) ")
+                .addEntity(Hospedagem.class);
+        query.setInteger("userid", userid);
+        List solicitacao = query.list();
+        return solicitacao;
+    }
 }

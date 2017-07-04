@@ -57,7 +57,7 @@ public class AvaliacoesDAO {
 
     static public List<Avaliacaohospedagem> getanfitriao(int userid) /* pegar lista de recomendadocoes de qnd ele foi anfitriao */ {
         Session session = HibernateSessionFactory.getSession();
-        Query query = session.createSQLQuery("SELECT * FROM AVALIACAOHOSPEDAGEM WHERE ANFITRIAO_FK = :userid")
+        Query query = session.createSQLQuery("SELECT * FROM AVALIACAOHOSPEDAGEM WHERE ANFITRIAO_FK = :userid AND AVA_ANFITRIAO_TEXT IS NOT NULL AND AVA_HOSPEDE_TEXT IS NOT NULL")
                 .addEntity(Avaliacaohospedagem.class);
         query.setInteger("userid", userid);
         List avaliacao = query.list();
@@ -65,7 +65,7 @@ public class AvaliacoesDAO {
     }
     static public List<Avaliacaohospedagem> gethospede(int userid) /* pegar lista de recomendadocoes de qnd ele foi hospede */{
         Session session = HibernateSessionFactory.getSession();
-        Query query = session.createSQLQuery("SELECT * FROM AVALIACAOHOSPEDAGEM WHERE HOSPEDE_FK = :userid")
+        Query query = session.createSQLQuery("SELECT * FROM AVALIACAOHOSPEDAGEM WHERE HOSPEDE_FK = :userid AND AVA_ANFITRIAO_TEXT IS NOT NULL AND AVA_HOSPEDE_TEXT IS NOT NULL")
                 .addEntity(Avaliacaohospedagem.class);
         query.setInteger("userid", userid);
         List avaliacao = query.list();
