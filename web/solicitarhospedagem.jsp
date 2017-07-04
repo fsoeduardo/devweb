@@ -29,7 +29,6 @@
 
                 <!-- Header -->
                 <header id="header">
-                    <h1 id="logo"><a href="index.jsp">Localhost <span>Seu site global de hospedagem</span></a></h1>
                     <nav id="nav">
                         <ul>
                             <li class="current"><a href="index.jsp">Home</a></li>
@@ -37,6 +36,7 @@
                             <li class="current"><a href="busca.jsp" class="scrolly">Buscar hospedagens</a></li>
                             <li class="current"><a href="pedidodesolicitacoes.jsp" class="scrolly">Pedidos de hospedagens</a></li>
                             <li class="current"><a href="solicitacoesfeitas.jsp" class="scrolly">Hospedagens solicitadas</a></li>
+                            <li class="current"><a href="avaliacao.jsp" class="scrolly">Avaliacao</a></li>
                             <li><a href="login.jsp" class="button special">Sair</a></li>
                         </ul>
                     </nav>
@@ -45,7 +45,6 @@
                 <article id="main">
                     <% Usuario user = ((Usuario) request.getAttribute("user"));%>
                     <header class="special container">
-                        <span class="icon fa-plane"></span>
                         <h2>Bem-vindo <strong> <a href="PerfilServlet?id=<%= request.getSession().getAttribute("logadoid")%>"> <%= request.getSession().getAttribute("logadonome")%> </a> </strong></h2>
                         <p>Navegue em nosso site e busque a sua hospedagem ideal.</p>
                     </header>

@@ -26,16 +26,15 @@
 
             <!-- Header -->
             <header id="header">
-                <h1 id="logo"><a href="index.jsp">Localhost <span>Seu site global de hospedagem</span></a></h1>
                 <nav id="nav">
                     <ul>
-                        <li class="current"><a href="index.jsp">Home</a></li>
-                        <li class="current"><a href="index.jsp#main" class="scrolly">Quem Somos</a></li>
-                        <li class="current"><a href="busca.jsp" class="scrolly">Buscar hospedagens</a></li>
-                        <li class="current"><a href="pedidodesolicitacoes.jsp" class="scrolly">Pedidos de hospedagens</a></li>
-                        <li class="current"><a href="solicitacoesfeitas.jsp" class="scrolly">Hospedagens solicitadas</a></li>
-
-                        <li><a href="login.jsp" class="button special">Sair</a></li>
+                            <li class="current"><a href="index.jsp">Home</a></li>
+                            <li class="current"><a href="index.jsp#main" class="scrolly">Quem Somos</a></li>
+                            <li class="current"><a href="busca.jsp" class="scrolly">Buscar hospedagens</a></li>
+                            <li class="current"><a href="pedidodesolicitacoes.jsp" class="scrolly">Pedidos de hospedagens</a></li>
+                            <li class="current"><a href="solicitacoesfeitas.jsp" class="scrolly">Hospedagens solicitadas</a></li>
+                            <li class="current"><a href="avaliacao.jsp" class="scrolly">Avaliacao</a></li>
+                            <li><a href="login.jsp" class="button special">Sair</a></li>
                     </ul>
                 </nav>
             </header>
@@ -72,7 +71,7 @@
                                     <span class="icon fa-futbol-o"></span>Esporte: <%= user.getEsporteFk().getNome()%></br>
                                     <span class="icon fa-users"></span>Número de Visitantes: <%= user.getMaxVisitante()%> </br>
                                     <span class="icon fa-envelope  "></span>Contato: <%= user.getEmail()%>  </br>
-                                    <span class="icon fa-star"></span> Média de Estrelas: <%= AvaliacoesDAO.getmedia(user.getId()) %> </br>  
+                                    <span class="icon fa-star"></span> Média de Estrelas: <%= AvaliacoesDAO.getmedia(user.getId()) %> </br> 
                                 </section>
                             </div>
 
