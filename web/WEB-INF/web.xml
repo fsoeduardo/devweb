@@ -12,6 +12,10 @@
         <servlet-name>buscaservlet</servlet-name>
         <servlet-class>Servlets.BuscaServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>CriarHospedagemServlet</servlet-name>
+        <servlet-class>Servlets.CriarHospedagemServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginUsuarioServlet</servlet-name>
         <url-pattern>/LoginUsuarioServlet</url-pattern>
@@ -23,6 +27,10 @@
     <servlet-mapping>
         <servlet-name>buscaservlet</servlet-name>
         <url-pattern>/buscaservlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CriarHospedagemServlet</servlet-name>
+        <url-pattern>/CriarHospedagemServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

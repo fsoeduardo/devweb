@@ -46,6 +46,7 @@ Contributor(s):
     <property name="hibernate.connection.url">jdbc:derby://localhost:1527/DW3.0</property>
     <property name="hibernate.connection.username">Usuario</property>
     <property name="hibernate.connection.password">123</property>
+    <property name="hibernate.connection.autocommit">true</property>
     <mapping class="Model.Usuario"/>
     <mapping class="Model.Cidade"/>
     <mapping class="Model.Avaliacaohospedagem"/>
@@ -58,6 +59,5 @@ Contributor(s):
     <mapping class="Model.HospedagemesportePK"/>
     <mapping class="Model.Pais"/>
     <mapping class="Model.Saida"/>
-
   </session-factory>
 </hibernate-configuration>

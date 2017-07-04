@@ -17,6 +17,7 @@
          <% for(Usuario u:resultado){%>   
                 <%= u.getNome()%>
                 <%= u.getBairro()+ ", " + u.getCidadeFk().getNome()+ ", " + u.getCidadeFk().getEstadoFk().getNome() + ", "  +u.getCidadeFk().getEstadoFk().getPaisFk().getNome() %>
+                <a href="solicitarhospedagem.jsp?anfitriao=<%=u.getId()%>">Solicitar Hospedagem</a>
                 <br>
                    
          <%}%>   
