@@ -1,11 +1,13 @@
 <%-- 
-    Document   : resultado
-    Created on : 02/07/2017, 15:57:16
+    Document   : pedidodesolicitacoes
+    Created on : 03/07/2017, 21:59:45
     Author     : Ricardo  Junior
 --%>
 
+<%@page import="Model.Hospedagemesporte"%>
 <%@page import="Model.Usuario"%>
-<%@page import="java.util.List"%>
+<%@page import="Model.Hospedagem"%>
+<%@page import="DAO.SolicitacoesDAO"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -34,21 +36,28 @@
             </header>
 
             <article id="main">
-                <% Usuario user = ((Usuario) request.getAttribute("user"));%>
                 <header class="special container">
                     <span class="icon fa-plane"></span>
                     <h2>Bem-vindo <strong> <a href="PerfilServlet?id=<%= request.getSession().getAttribute("logadoid")%>"> <%= request.getSession().getAttribute("logadonome")%> </a> </strong></h2>
                     <p>Navegue em nosso site e busque a sua hospedagem ideal.</p>
                 </header>
-            <% List<Usuario> resultado = ((List) request.getAttribute("resultado"));%>
-            <% for (Usuario u : resultado) {%>   
-                <% if ((u.getId()!= request.getSession().getAttribute("logadoid")) && (u.getRecebeVisita())) {%>
-                    <%= u.getNome()%>
-                    <%= u.getBairro() + ", " + u.getCidadeFk().getNome() + ", " + u.getCidadeFk().getEstadoFk().getNome() + ", " + u.getCidadeFk().getEstadoFk().getPaisFk().getNome()%>
-                    <a href="solicitarhospedagem.jsp?anfitriao=<%=u.getId()%>">Solicitar Hospedagem</a>
-                    <br>
-                <%}%>                      
-            <%}%>
+        <%Usuario user = (Usuario) request.getSession().getAttribute("logado");%>
+        <%for (Hospedagem h: SolicitacoesDAO.getsolicitacoes( user.getId() )) {%>
+                <% Hospedagemesporte he = SolicitacoesDAO.gethospedagemesporte(h.getId()); %>
+                
+                Data Inicio: <%= h.getDataInicio() %><br>
+                Data Termino: <%= h.getDataTermino() %><br>
+                Quantidade de Hospedes: <%= h.getQtdHospedes() %><br>
+                Solicitante: <%= h.getSolicitanteId().getNome() %><br>
+                Esporte: <%= he.getEsporte().getNome() %><br>
+                Quantidade de esportistas: <%= he.getQtdEsportista() %><br>
+                <a href="RespostaSolicitacaoServlet?hospedagem=<%= h.getId() %>&op=1"><button>Aceitar</button></a>
+                <a href="RespostaSolicitacaoServlet?hospedagem=<%= h.getId() %>&op=2"><button>Recusar</button></a>
+                <br>
+                ____________________________________________________
+                <br>
+                
+        <%}%>
             </article>
             <!-- Footer -->
             <footer id="footer">

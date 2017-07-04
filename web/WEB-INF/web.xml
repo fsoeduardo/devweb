@@ -16,6 +16,10 @@
         <servlet-name>CriarHospedagemServlet</servlet-name>
         <servlet-class>Servlets.CriarHospedagemServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>RespostaSolicitacaoServlet</servlet-name>
+        <servlet-class>Servlets.RespostaSolicitacaoServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginUsuarioServlet</servlet-name>
         <url-pattern>/LoginUsuarioServlet</url-pattern>
@@ -31,6 +35,10 @@
     <servlet-mapping>
         <servlet-name>CriarHospedagemServlet</servlet-name>
         <url-pattern>/CriarHospedagemServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>RespostaSolicitacaoServlet</servlet-name>
+        <url-pattern>/RespostaSolicitacaoServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
