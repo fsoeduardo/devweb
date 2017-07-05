@@ -3,14 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Servlets;
+package Controller;
 
 import DAO.HibernateSessionFactory;
+import Model.Avaliacaohospedagem;
 import Model.Hospedagem;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -23,7 +23,7 @@ import org.hibernate.Transaction;
  *
  * @author Ricardo Junior
  */
-public class RespostaSolicitacaoServlet extends HttpServlet {
+public class AvaliacaoServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -37,36 +37,67 @@ public class RespostaSolicitacaoServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-       
+     
         Session session = HibernateSessionFactory.getSession();
         Transaction tcx = session.beginTransaction();
 
         
-        Query query = session.createSQLQuery("SELECT * FROM HOSPEDAGEM WHERE ID = :id")
-                .addEntity(Hospedagem.class);
+        Query query = session.createSQLQuery("SELECT * FROM AVALIACAOHOSPEDAGEM WHERE HOSPEDAGEM_FK = :id")
+                .addEntity(Avaliacaohospedagem.class);
         query.setString("id", request.getParameter("hospedagem"));
         List returned_query = query.list();
-        Hospedagem h = (Hospedagem) returned_query.get(0);
-        
-        if ("1".equals(request.getParameter("op"))){
-            h.setSituacaoAnfitriao(true);
-        }
-        else if("2".equals(request.getParameter("op"))) {
-             h.setSituacaoAnfitriao(false);
-        }
-        else if("3".equals(request.getParameter("op"))) {
-             h.setConfirmacaoSolicitante(true);
-        }
-        else {
-             h.setConfirmacaoSolicitante(false);
-        }
-        
-            
-        session.update(h);
-        session.flush();
-        tcx.commit();
-        response.sendRedirect("pedidodesolicitacoes.jsp");
+  
+        if (!returned_query.isEmpty()){
+            Avaliacaohospedagem ah = (Avaliacaohospedagem) returned_query.get(0);
+            if (request.getParameter("textoanfitriao") != null){
+                ah.setAvaAnfitriaoText(request.getParameter("textoanfitriao"));
+                ah.setNotaAnfitriao(Integer.parseInt(request.getParameter("notaanfitriao")));
 
+            }
+            if (request.getParameter("textohospede") != null){
+                ah.setAvaHospedeText(request.getParameter("textohospede"));
+                ah.setNotaHospede(Integer.parseInt(request.getParameter("notahospede")));
+
+            }
+            session.update(ah);
+            session.flush();
+            tcx.commit();
+            response.sendRedirect("avaliacao.jsp");
+
+        }
+        else{
+            
+            Avaliacaohospedagem ah = new Avaliacaohospedagem();
+            Query queryhospedagem = session.createSQLQuery("SELECT * FROM HOSPEDAGEM WHERE ID = :id")
+                    .addEntity(Hospedagem.class);
+            queryhospedagem.setString("id", request.getParameter("hospedagem"));
+            List returned_query2 = queryhospedagem.list();
+            
+            Hospedagem h = (Hospedagem) returned_query2.get(0);
+            
+            Query cont = session.createSQLQuery("SELECT COUNT(ID) FROM AVALIACAOHOSPEDAGEM ");
+            ah.setId(((int) cont.list().get(0)) + 1);
+            ah.setHospedagemFk(h);
+            ah.setAnfitriaoFk(h.getAnfitriaoId());
+            ah.setHospedeFk(h.getSolicitanteId());
+
+            if (request.getParameter("textoanfitriao") != null){
+                ah.setAvaAnfitriaoText(request.getParameter("textoanfitriao"));
+                ah.setNotaAnfitriao(Integer.parseInt(request.getParameter("notaanfitriao")));
+            }
+
+            if (request.getParameter("textohospede") != null){
+                ah.setAvaHospedeText(request.getParameter("textohospede"));
+                ah.setNotaHospede(Integer.parseInt(request.getParameter("notahospede")));
+
+            }
+
+            session.save(ah);
+            session.flush();
+            tcx.commit();
+            response.sendRedirect("avaliacao.jsp");
+        }
+            
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -81,8 +112,8 @@ public class RespostaSolicitacaoServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-     processRequest(request, response);
-       }
+        processRequest(request, response);
+    }
 
     /**
      * Handles the HTTP <code>POST</code> method.
@@ -95,8 +126,8 @@ public class RespostaSolicitacaoServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-     processRequest(request, response);
-       }
+        processRequest(request, response);
+    }
 
     /**
      * Returns a short description of the servlet.

@@ -2,27 +2,27 @@
 <web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
     <servlet>
         <servlet-name>LoginUsuarioServlet</servlet-name>
-        <servlet-class>Servlets.LoginUsuarioServlet</servlet-class>
+        <servlet-class>Controller.LoginUsuarioServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>PerfilServlet</servlet-name>
-        <servlet-class>Servlets.PerfilServlet</servlet-class>
+        <servlet-class>Controller.PerfilServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>buscaservlet</servlet-name>
-        <servlet-class>Servlets.BuscaServlet</servlet-class>
+        <servlet-class>Controller.BuscaServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>CriarHospedagemServlet</servlet-name>
-        <servlet-class>Servlets.CriarHospedagemServlet</servlet-class>
+        <servlet-class>Controller.CriarHospedagemServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>RespostaSolicitacaoServlet</servlet-name>
-        <servlet-class>Servlets.RespostaSolicitacaoServlet</servlet-class>
+        <servlet-class>Controller.RespostaSolicitacaoServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>AvaliacaoServlet</servlet-name>
-        <servlet-class>Servlets.AvaliacaoServlet</servlet-class>
+        <servlet-class>Controller.AvaliacaoServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>LoginUsuarioServlet</servlet-name>

@@ -1,11 +1,13 @@
+package Controller;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Servlets;
 
 import DAO.HibernateSessionFactory;
+import Model.Usuario;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
@@ -14,7 +16,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import Model.Usuario;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
@@ -22,7 +23,7 @@ import org.hibernate.Session;
  *
  * @author Ricardo Junior
  */
-public class PerfilServlet extends HttpServlet {
+public class BuscaServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -36,23 +37,17 @@ public class PerfilServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-       
-        
         Session session = HibernateSessionFactory.getSession();
         
-        Query query = session.createSQLQuery("SELECT * FROM USUARIO WHERE ID = :id")
-                .addEntity(Usuario.class);
-        
-
-        query.setString("id", request.getParameter("id"));
+        Query query = session.createSQLQuery("SELECT * FROM USUARIO WHERE CIDADE_FK = (SELECT CIDADE.ID FROM CIDADE WHERE CIDADE.NOME=:cidade AND CIDADE.ESTADO_FK = (SELECT ESTADO.ID FROM ESTADO WHERE PAIS_FK = (SELECT PAIS.ID FROM PAIS WHERE NOME = :pais)))")
+                .addEntity(Usuario.class);        
+        query.setString("cidade", request.getParameter("cidade").toLowerCase());
+        query.setString("pais", request.getParameter("pais").toLowerCase());
         List returned_query = query.list();
-        Usuario user = (Usuario) returned_query.get(0);
-        RequestDispatcher view = request.getRequestDispatcher("perfil.jsp");
-        request.setAttribute("user", user);
+        RequestDispatcher view = request.getRequestDispatcher("resultado.jsp");
+        request.setAttribute("resultado", returned_query);
         view.forward(request, response);
-        
-        
-
+            
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -95,4 +90,3 @@ public class PerfilServlet extends HttpServlet {
     }// </editor-fold>
 
 }
-    

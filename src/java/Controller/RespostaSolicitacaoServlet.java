@@ -3,10 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Servlets;
+package Controller;
 
 import DAO.HibernateSessionFactory;
-import Model.Usuario;
+import Model.Hospedagem;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
@@ -17,12 +17,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 /**
  *
  * @author Ricardo Junior
  */
-public class LoginUsuarioServlet extends HttpServlet {
+public class RespostaSolicitacaoServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -36,34 +37,37 @@ public class LoginUsuarioServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        
+       
         Session session = HibernateSessionFactory.getSession();
-        
-        Query query = session.createSQLQuery("SELECT * FROM USUARIO WHERE EMAIL = :email")
-                .addEntity(Usuario.class);
-        
+        Transaction tcx = session.beginTransaction();
 
-        query.setString("email", request.getParameter("username"));
+        
+        Query query = session.createSQLQuery("SELECT * FROM HOSPEDAGEM WHERE ID = :id")
+                .addEntity(Hospedagem.class);
+        query.setString("id", request.getParameter("hospedagem"));
         List returned_query = query.list();
+        Hospedagem h = (Hospedagem) returned_query.get(0);
         
-        if (!returned_query.isEmpty()) {
-            Usuario user = (Usuario) returned_query.get(0);
-            if (user.getSenha().compareTo(request.getParameter("password")) == 0) {
-                request.getSession().setAttribute("logado", user);
-                request.getSession().setAttribute("logadonome", user.getNome());
-                request.getSession().setAttribute("logadoid", user.getId());                
-                RequestDispatcher view = request.getRequestDispatcher("perfil.jsp");
-                request.setAttribute("user", user);
-                view.forward(request, response);
-            }
-        } 
+        if ("1".equals(request.getParameter("op"))){
+            h.setSituacaoAnfitriao(true);
+        }
+        else if("2".equals(request.getParameter("op"))) {
+             h.setSituacaoAnfitriao(false);
+        }
+        else if("3".equals(request.getParameter("op"))) {
+             h.setConfirmacaoSolicitante(true);
+        }
+        else {
+             h.setConfirmacaoSolicitante(false);
+        }
         
-        request.setAttribute("login_failed", true);
-        RequestDispatcher view = request.getRequestDispatcher("login.jsp");
-        view.forward(request, response);
-        
+            
+        session.update(h);
+        session.flush();
+        tcx.commit();
+        response.sendRedirect("pedidodesolicitacoes.jsp");
+
     }
-    
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -77,8 +81,8 @@ public class LoginUsuarioServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
-    }
+     processRequest(request, response);
+       }
 
     /**
      * Handles the HTTP <code>POST</code> method.
@@ -91,8 +95,8 @@ public class LoginUsuarioServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
-    }
+     processRequest(request, response);
+       }
 
     /**
      * Returns a short description of the servlet.

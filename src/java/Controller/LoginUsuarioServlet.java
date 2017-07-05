@@ -1,10 +1,9 @@
-package Servlets;
-
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+package Controller;
 
 import DAO.HibernateSessionFactory;
 import Model.Usuario;
@@ -23,7 +22,7 @@ import org.hibernate.Session;
  *
  * @author Ricardo Junior
  */
-public class BuscaServlet extends HttpServlet {
+public class LoginUsuarioServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -37,18 +36,34 @@ public class BuscaServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        
         Session session = HibernateSessionFactory.getSession();
         
-        Query query = session.createSQLQuery("SELECT * FROM USUARIO WHERE CIDADE_FK = (SELECT CIDADE.ID FROM CIDADE WHERE CIDADE.NOME=:cidade AND CIDADE.ESTADO_FK = (SELECT ESTADO.ID FROM ESTADO WHERE PAIS_FK = (SELECT PAIS.ID FROM PAIS WHERE NOME = :pais)))")
-                .addEntity(Usuario.class);        
-        query.setString("cidade", request.getParameter("cidade").toLowerCase());
-        query.setString("pais", request.getParameter("pais").toLowerCase());
+        Query query = session.createSQLQuery("SELECT * FROM USUARIO WHERE EMAIL = :email")
+                .addEntity(Usuario.class);
+        
+
+        query.setString("email", request.getParameter("username"));
         List returned_query = query.list();
-        RequestDispatcher view = request.getRequestDispatcher("resultado.jsp");
-        request.setAttribute("resultado", returned_query);
+        
+        if (!returned_query.isEmpty()) {
+            Usuario user = (Usuario) returned_query.get(0);
+            if (user.getSenha().compareTo(request.getParameter("password")) == 0) {
+                request.getSession().setAttribute("logado", user);
+                request.getSession().setAttribute("logadonome", user.getNome());
+                request.getSession().setAttribute("logadoid", user.getId());                
+                RequestDispatcher view = request.getRequestDispatcher("perfil.jsp");
+                request.setAttribute("user", user);
+                view.forward(request, response);
+            }
+        } 
+        
+        request.setAttribute("login_failed", true);
+        RequestDispatcher view = request.getRequestDispatcher("login.jsp");
         view.forward(request, response);
-            
+        
     }
+    
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
